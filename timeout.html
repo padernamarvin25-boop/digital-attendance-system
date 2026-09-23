@@ -1,92 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time Out</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #dc2626;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .back {
-            background: #555;
-        }
-
-        #status {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>Employee Time Out</h1>
 
-    <h1>Employee Time Out</h1>
+<p>Employee ID</p>
+<input type="text" id="employeeId">
 
-    <input type="text" id="employeeId" placeholder="Employee ID">
+<p>Employee Name</p>
+<input type="text" id="employeeName">
 
-    <input type="text" id="employeeName" placeholder="Employee Name">
+<br><br>
 
-    <button onclick="timeOut()">TIME OUT</button>
+<button type="button" onclick="alert('TIME OUT BUTTON WORKS!')">
+    TIME OUT
+</button>
 
-    <div id="status"></div>
+<br><br>
 
-    <button class="back" onclick="goBack()">Back to Dashboard</button>
+<a href="dashboard.html">
+    BACK TO DASHBOARD
+</a>
 
-</div>
-
-<script>
-
-function timeOut() {
-
-    let employeeId = document.getElementById("employeeId").value;
-    let employeeName = document.getElementById("employeeName").value;
-
-    if (employeeId === "" || employeeName === "") {
-        alert("Please enter Employee ID and Employee Name.");
-        return;
-    }
-
-    let attendance = JSON.parse(localStorage.getItem("attendance
+</body>
+</html>
