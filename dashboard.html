@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Digital Attendance</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+        }
+
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            width: 200px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #dc2626;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Digital Attendance System</h1>
+    <p>Faculty and Staff Dashboard</p>
+</header>
+
+<div class="container">
+
+    <h2>Welcome, Admin!</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h2>Employees</h2>
+            <p>Manage faculty and staff.</p>
+        </div>
+
+        <div class="card">
+            <h2>Time In</h2>
+            <p>Record employee time in.</p>
+        </div>
+
+        <div class="card">
+            <h2>Time Out</h2>
+            <p>Record employee time out.</p>
+        </div>
+
+        <div class="card">
+            <h2>Attendance</h2>
+            <p>View attendance records.</p>
+        </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="logout()">Logout</button>
+
+</div>
+
+<script>
+function logout() {
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
