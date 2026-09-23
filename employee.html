@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        .back {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Employee Registration</h1>
+
+    <input type="text" id="employeeId" placeholder="Employee ID">
+
+    <input type="text" id="employeeName" placeholder="Employee Name">
+
+    <input type="text" id="position" placeholder="Position">
+
+    <input type="text" id="department" placeholder="Department">
+
+    <button onclick="addEmployee()">Save Employee</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+
+        <tbody id="employeeTable"></tbody>
+    </table>
+
+    <button class="back" onclick="goBack()">Back to Dashboard</button>
+
+</div>
+
+<script>
+
+function addEmployee() {
+
+    let id = document.getElementById("employeeId").value;
+    let name = document.getElementById("employeeName").value;
+    let position = document.getElementById("position").value;
+    let department = document.getElementById("department").value;
+
+    if (id === "" || name === "" || position === "" || department === "") {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    let table = document.getElementById("employeeTable");
+
+    let row = table.insertRow();
+
+    row.insertCell(0).innerHTML = id;
+    row.insertCell(1).innerHTML = name;
+    row.insertCell(2).innerHTML = position;
+    row.insertCell(3).innerHTML = department;
+
+    document.getElementById("employeeId").value = "";
+    document.getElementById("employeeName").value = "";
+    document.getElementById("position").value = "";
+    document.getElementById("department").value = "";
+}
+
+function goBack() {
+    window.location.href = "dashboard.html";
+}
+
+</script>
+
+</body>
+</html>
