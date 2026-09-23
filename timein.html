@@ -8,38 +8,33 @@
 
 <h1>Employee Time In</h1>
 
-<p>Employee ID</p>
-<input type="text" id="employeeId">
+<form onsubmit="return saveTimeIn()">
 
-<p>Employee Name</p>
-<input type="text" id="employeeName">
+    <p>Employee ID</p>
+    <input type="text" id="employeeId" required>
 
-<br><br>
+    <p>Employee Name</p>
+    <input type="text" id="employeeName" required>
 
-<button type="button" onclick="timeIn()">TIME IN</button>
+    <br><br>
+
+    <input type="submit" value="TIME IN">
+
+</form>
 
 <p id="result"></p>
 
-<br>
-
-<button type="button" onclick="backDashboard()">
-    BACK TO DASHBOARD
-</button>
+<a href="dashboard.html">BACK TO DASHBOARD</a>
 
 <script>
-function timeIn() {
+function saveTimeIn() {
 
-    let id = document.getElementById("employeeId").value;
-    let name = document.getElementById("employeeName").value;
+    var id = document.getElementById("employeeId").value;
+    var name = document.getElementById("employeeName").value;
 
-    if (id == "" || name == "") {
-        alert("Please enter Employee ID and Employee Name.");
-        return;
-    }
+    var now = new Date();
 
-    let now = new Date();
-
-    let attendance = {
+    var attendance = {
         employeeId: id,
         employeeName: name,
         date: now.toLocaleDateString(),
@@ -50,16 +45,12 @@ function timeIn() {
     localStorage.setItem("attendance", JSON.stringify(attendance));
 
     document.getElementById("result").innerHTML =
-        "TIME IN SUCCESSFUL!<br>" +
-        name + "<br>" +
-        attendance.date + "<br>" +
-        attendance.timeIn;
-}
+        "TIME IN SUCCESSFUL! " + now.toLocaleTimeString();
 
-function backDashboard() {
-    window.location.href = "dashboard.html";
+    return false;
 }
 </script>
 
 </body>
 </html>
+
