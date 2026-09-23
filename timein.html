@@ -1,82 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time In</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #2563eb;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .back {
-            background: #555;
-        }
-
-        #status {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>Employee Time In</h1>
 
-    <h1>Employee Time In</h1>
+<label>Employee ID:</label>
+<br>
+<input type="text" id="employeeId">
+<br><br>
 
-    <input type="text" id="employeeId" placeholder="Employee ID">
+<label>Employee Name:</label>
+<br>
+<input type="text" id="employeeName">
+<br><br>
 
-    <input type="text" id="employeeName" placeholder="Employee Name">
+<button onclick="timeIn()">TIME IN</button>
 
-    <button onclick="timeIn()">TIME IN</button>
+<p id="result"></p>
 
-    <div id="status"></div>
+<br>
 
-    <button class="back" onclick="goBack()">Back to Dashboard</button>
-
-</div>
+<a href="dashboard.html">Back to Dashboard</a>
 
 <script>
 
 function timeIn() {
+
+    let id = document.getElementById("employeeId").value;
+    let name = document.getElementById("employeeName").value;
+
+    if (id === "" || name === "") {
+        alert("Please enter Employee ID and Employee Name.");
+        return;
+    }
+
+    let now = new Date();
+
+    let attendance = {
+        employeeId: id,
+        employeeName: name,
+        date: now.toLocaleDateString(),
+        timeIn: now.toLocaleTimeString(),
+        timeOut: ""
+    };
+
+    localStorage.setItem("attendance", JSON.stringify(attendance));
+
+    document.getElementById("result").innerHTML =
+        "Time In Successful!<br>" +
+        name + "<br>" +
+        attendance.date + "<br>" +
+        attendance.timeIn;
+}
+
+</script>
+
+</body>
+</html>
