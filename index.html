@@ -1,13 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Attendance System</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            width: 330px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #message {
+            text-align: center;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Digital Attendance System</h1>
-    <p>Welcome to our attendance system.</p>
+<div class="login-box">
+
+    <h1>Digital Attendance</h1>
+    <p>Faculty and Staff Login</p>
+
+    <input type="text" id="username" placeholder="Username">
+
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+function login() {
+
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    if (username === "admin" && password === "admin123") {
+
+        alert("Login successful!");
+
+        window.location.href = "dashboard.html";
+
+    } else {
+
+        document.getElementById("message").innerHTML =
+            "Invalid username or password.";
+
+    }
+}
+</script>
 
 </body>
 </html>
+
+
 
