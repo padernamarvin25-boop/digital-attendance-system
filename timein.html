@@ -8,32 +8,31 @@
 
 <h1>Employee Time In</h1>
 
-<label>Employee ID:</label>
-<br>
+<p>Employee ID</p>
 <input type="text" id="employeeId">
-<br><br>
 
-<label>Employee Name:</label>
-<br>
+<p>Employee Name</p>
 <input type="text" id="employeeName">
+
 <br><br>
 
-<button onclick="timeIn()">TIME IN</button>
+<button type="button" onclick="timeIn()">TIME IN</button>
 
 <p id="result"></p>
 
 <br>
 
-<a href="dashboard.html">Back to Dashboard</a>
+<button type="button" onclick="backDashboard()">
+    BACK TO DASHBOARD
+</button>
 
 <script>
-
 function timeIn() {
 
     let id = document.getElementById("employeeId").value;
     let name = document.getElementById("employeeName").value;
 
-    if (id === "" || name === "") {
+    if (id == "" || name == "") {
         alert("Please enter Employee ID and Employee Name.");
         return;
     }
@@ -51,12 +50,15 @@ function timeIn() {
     localStorage.setItem("attendance", JSON.stringify(attendance));
 
     document.getElementById("result").innerHTML =
-        "Time In Successful!<br>" +
+        "TIME IN SUCCESSFUL!<br>" +
         name + "<br>" +
         attendance.date + "<br>" +
         attendance.timeIn;
 }
 
+function backDashboard() {
+    window.location.href = "dashboard.html";
+}
 </script>
 
 </body>
