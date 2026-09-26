@@ -19,7 +19,30 @@
 
 <br><br>
 
+<h2>Attendance Summary</h2>
+
 <table border="1" width="100%" cellpadding="10">
+
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Present</th>
+            <th>Absent</th>
+        </tr>
+    </thead>
+
+    <tbody id="summaryTable">
+    </tbody>
+
+</table>
+
+<br><br>
+
+<h2>Daily Attendance</h2>
+
+<table border="1" width="100%" cellpadding="10">
+
     <thead>
         <tr>
             <th>Employee ID</th>
@@ -31,7 +54,9 @@
         </tr>
     </thead>
 
-    <tbody id="monthlyTable"></tbody>
+    <tbody id="monthlyTable">
+    </tbody>
+
 </table>
 
 <br>
@@ -50,69 +75,141 @@ function showMonthlyRecord() {
         return;
     }
 
-    let records = JSON.parse(
-        localStorage.getItem("attendanceRecords")
-    ) || [];
+    let employees =
+        JSON.parse(localStorage.getItem("employees")) || [];
 
-    let table =
+    let records =
+        JSON.parse(localStorage.getItem("attendanceRecords")) || [];
+
+    let summaryTable =
+        document.getElementById("summaryTable");
+
+    let monthlyTable =
         document.getElementById("monthlyTable");
 
-    table.innerHTML = "";
+    summaryTable.innerHTML = "";
+    monthlyTable.innerHTML = "";
 
-    let found = false;
+    if (employees.length === 0) {
 
-    records.forEach(function(record) {
+        let row = summaryTable.insertRow();
+        let cell = row.insertCell(0);
 
-        let dateParts = record.date.split("/");
+        cell.colSpan = 4;
+        cell.innerHTML = "No registered employees.";
 
-        if (dateParts.length === 3) {
+        return;
+    }
 
-            let month = dateParts[0].padStart(2, "0");
-            let day = dateParts[1].padStart(2, "0");
-            let year = dateParts[2];
+    let parts = selectedMonth.split("-");
 
-            let recordMonth =
-                year + "-" + month;
+    let year = parseInt(parts[0]);
+    let month = parseInt(parts[1]);
 
-            if (recordMonth === selectedMonth) {
+    let daysInMonth =
+        new Date(year, month, 0).getDate();
 
-                found = true;
+    let presentTotal = 0;
+    let absentTotal = 0;
 
-                let row = table.insertRow();
+    employees.forEach(function(employee) {
 
-                row.insertCell(0).innerHTML =
-                    record.employeeId;
+        let present = 0;
+        let absent = 0;
 
-                row.insertCell(1).innerHTML =
-                    record.employeeName;
+        for (let day = 1; day <= daysInMonth; day++) {
 
-                row.insertCell(2).innerHTML =
-                    record.date;
+            let currentDate =
+                new Date(year, month - 1, day);
+
+            let dayOfWeek =
+                currentDate.getDay();
+
+            // Monday to Friday only
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                continue;
+            }
+
+            let dateString =
+                (month < 10 ? "0" : "") + month + "/" +
+                (day < 10 ? "0" : "") + day + "/" +
+                year;
+
+            let attendance = records.find(function(record) {
+
+                return record.employeeId === employee.id &&
+                       record.date === dateString;
+
+            });
+
+            let row = monthlyTable.insertRow();
+
+            row.insertCell(0).innerHTML =
+                employee.id;
+
+            row.insertCell(1).innerHTML =
+                employee.name;
+
+            row.insertCell(2).innerHTML =
+                dateString;
+
+            if (attendance) {
+
+                present++;
 
                 row.insertCell(3).innerHTML =
-                    record.timeIn;
+                    attendance.timeIn;
 
                 row.insertCell(4).innerHTML =
-                    record.timeOut || "Not yet";
+                    attendance.timeOut || "Not yet";
 
                 row.insertCell(5).innerHTML =
-                    record.status;
+                    "Present";
+
+            } else {
+
+                absent++;
+
+                row.insertCell(3).innerHTML =
+                    "-";
+
+                row.insertCell(4).innerHTML =
+                    "-";
+
+                row.insertCell(5).innerHTML =
+                    "Absent";
             }
+
         }
+
+        presentTotal += present;
+        absentTotal += absent;
+
+        let summaryRow =
+            summaryTable.insertRow();
+
+        summaryRow.insertCell(0).innerHTML =
+            employee.id;
+
+        summaryRow.insertCell(1).innerHTML =
+            employee.name;
+
+        summaryRow.insertCell(2).innerHTML =
+            present;
+
+        summaryRow.insertCell(3).innerHTML =
+            absent;
 
     });
 
-    if (!found) {
+    let totalRow =
+        summaryTable.insertRow();
 
-        let row = table.insertRow();
+    totalRow.insertCell(0).innerHTML = "";
+    totalRow.insertCell(1).innerHTML = "TOTAL";
+    totalRow.insertCell(2).innerHTML = presentTotal;
+    totalRow.insertCell(3).innerHTML = absentTotal;
 
-        let cell = row.insertCell(0);
-
-        cell.colSpan = 6;
-
-        cell.innerHTML =
-            "No attendance records for this month.";
-    }
 }
 
 </script>
