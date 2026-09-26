@@ -22,10 +22,14 @@
             text-align: center;
         }
 
+        .header h1 {
+            margin: 0 0 8px;
+        }
+
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 30px auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
         .card {
@@ -38,6 +42,7 @@
 
         h2 {
             color: #1e3a8a;
+            margin-top: 0;
         }
 
         .form-grid {
@@ -54,54 +59,74 @@
             font-size: 15px;
         }
 
-        button {
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
         }
 
-        .save {
+        .save-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
             background: #2563eb;
             color: white;
-            margin-top: 20px;
-            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .edit {
-            background: #f59e0b;
-            color: white;
+        .save-button:hover {
+            background: #1d4ed8;
         }
 
-        .delete {
-            background: #dc2626;
-            color: white;
-        }
-
-        .table-box {
+        .table-container {
             overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 650px;
+            min-width: 700px;
         }
 
         th {
             background: #1e3a8a;
             color: white;
-            padding: 12px;
+            padding: 13px;
             text-align: left;
         }
 
         td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        @media(max-width: 650px) {
+        .edit-button {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .empty {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        @media (max-width: 650px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -113,7 +138,7 @@
 
 <div class="header">
     <h1>Digital Attendance System</h1>
-    <p>Employee Registration</p>
+    <p>Faculty and Staff Employee Registration</p>
 </div>
 
 <div class="container">
@@ -147,27 +172,26 @@
         </div>
 
         <button
-            class="save"
-            id="saveButton"
-            onclick="saveEmployee()">
+            type="button"
+            class="save-button"
+            id="saveButton">
             SAVE EMPLOYEE
         </button>
 
     </div>
 
-
     <div class="card">
 
         <h2>Registered Employees</h2>
 
-        <div class="table-box">
+        <div class="table-container">
 
             <table>
 
                 <thead>
                     <tr>
                         <th>Employee ID</th>
-                        <th>Name</th>
+                        <th>Employee Name</th>
                         <th>Position</th>
                         <th>Department</th>
                         <th>Action</th>
@@ -184,13 +208,14 @@
 
 </div>
 
-
 <script>
 
 let editIndex = -1;
 
 
-function saveEmployee() {
+/* SAVE / UPDATE */
+
+document.getElementById("saveButton").addEventListener("click", function() {
 
     let id =
         document.getElementById("employeeId").value.trim();
@@ -211,7 +236,6 @@ function saveEmployee() {
         position === "" ||
         department === ""
     ) {
-        alert("Please complete all fields.");
         return;
     }
 
@@ -220,16 +244,20 @@ function saveEmployee() {
         JSON.parse(localStorage.getItem("employees")) || [];
 
 
+    /* NEW EMPLOYEE */
+
     if (editIndex === -1) {
 
-        let existing = employees.find(function(employee) {
-            return employee.id === id;
-        });
+        let existing =
+            employees.find(function(employee) {
+                return employee.id === id;
+            });
+
 
         if (existing) {
-            alert("Employee ID already exists.");
             return;
         }
+
 
         employees.push({
             id: id,
@@ -238,43 +266,50 @@ function saveEmployee() {
             department: department
         });
 
+
         localStorage.setItem(
             "employees",
             JSON.stringify(employees)
         );
 
-        alert("Employee registered successfully!");
 
-        // AUTOMATICALLY GO TO TIME IN
+        /* DIRECT TO TIME IN */
+
         window.location.href = "timein.html";
 
-    } else {
-
-        employees[editIndex] = {
-            id: id,
-            name: name,
-            position: position,
-            department: department
-        };
-
-        localStorage.setItem(
-            "employees",
-            JSON.stringify(employees)
-        );
-
-        alert("Employee updated successfully!");
-
-        editIndex = -1;
-
-        document.getElementById("saveButton").innerHTML =
-            "SAVE EMPLOYEE";
-
-        clearForm();
-
-        displayEmployees();
+        return;
     }
-}
 
+
+    /* EDIT EMPLOYEE */
+
+    employees[editIndex] = {
+        id: id,
+        name: name,
+        position: position,
+        department: department
+    };
+
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+
+    editIndex = -1;
+
+    document.getElementById("saveButton").innerHTML =
+        "SAVE EMPLOYEE";
+
+    clearForm();
+
+    displayEmployees();
+
+});
+
+
+/* DISPLAY EMPLOYEES */
 
 function displayEmployees() {
 
@@ -287,33 +322,62 @@ function displayEmployees() {
     table.innerHTML = "";
 
 
+    if (employees.length === 0) {
+
+        let row = table.insertRow();
+
+        let cell = row.insertCell(0);
+
+        cell.colSpan = 5;
+
+        cell.className = "empty";
+
+        cell.innerHTML =
+            "No registered employees yet.";
+
+        return;
+    }
+
+
     employees.forEach(function(employee, index) {
 
         let row = table.insertRow();
 
-        row.insertCell(0).innerHTML = employee.id;
-        row.insertCell(1).innerHTML = employee.name;
-        row.insertCell(2).innerHTML = employee.position;
-        row.insertCell(3).innerHTML = employee.department;
+        row.insertCell(0).innerHTML =
+            employee.id;
+
+        row.insertCell(1).innerHTML =
+            employee.name;
+
+        row.insertCell(2).innerHTML =
+            employee.position;
+
+        row.insertCell(3).innerHTML =
+            employee.department;
 
         row.insertCell(4).innerHTML =
-            '<button class="edit" onclick="editEmployee(' +
+            '<button class="edit-button" onclick="editEmployee(' +
             index +
             ')">EDIT</button> ' +
 
-            '<button class="delete" onclick="deleteEmployee(' +
+            '<button class="delete-button" onclick="deleteEmployee(' +
             index +
             ')">DELETE</button>';
+
     });
 }
 
+
+/* EDIT */
 
 function editEmployee(index) {
 
     let employees =
         JSON.parse(localStorage.getItem("employees")) || [];
 
-    let employee = employees[index];
+    let employee =
+        employees[index];
+
 
     document.getElementById("employeeId").value =
         employee.id;
@@ -327,23 +391,28 @@ function editEmployee(index) {
     document.getElementById("department").value =
         employee.department;
 
+
     editIndex = index;
+
 
     document.getElementById("saveButton").innerHTML =
         "UPDATE EMPLOYEE";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
 }
 
+
+/* DELETE */
 
 function deleteEmployee(index) {
 
     let employees =
         JSON.parse(localStorage.getItem("employees")) || [];
-
-    let employee = employees[index];
-
-    if (!confirm("Delete " + employee.name + "?")) {
-        return;
-    }
 
     employees.splice(index, 1);
 
@@ -354,9 +423,10 @@ function deleteEmployee(index) {
 
     displayEmployees();
 
-    alert("Employee deleted successfully!");
 }
 
+
+/* CLEAR */
 
 function clearForm() {
 
@@ -366,8 +436,11 @@ function clearForm() {
     document.getElementById("department").value = "";
 
     editIndex = -1;
+
 }
 
+
+/* LOAD */
 
 displayEmployees();
 
@@ -375,5 +448,3 @@ displayEmployees();
 
 </body>
 </html>
-Compose
-Write to ROAR,ROAR,ROAR✊🐖( Sir Cantos)
