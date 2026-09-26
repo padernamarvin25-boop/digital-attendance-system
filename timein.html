@@ -1,191 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Employee Time In</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            background: white;
-            width: 400px;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #777;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 15px;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.4);
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            padding: 13px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background: #5568d9;
-        }
-
-        #result {
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .back:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <title>Time In</title>
 </head>
 
 <body>
 
-    <div class="container">
+<h1>Employee Time In</h1>
 
-        <h1>Employee Time In</h1>
+<p>Employee ID</p>
+<input type="text" id="employeeId">
 
-        <p class="subtitle">
-            Enter your employee information
-        </p>
+<p>Employee Name</p>
+<input type="text" id="employeeName">
 
-        <form onsubmit="return saveTimeIn()">
+<br><br>
 
-            <label for="employeeId">Employee ID</label>
-            <input
-                type="text"
-                id="employeeId"
-                placeholder="Enter Employee ID"
-                required
-            >
+<button onclick="timeIn()">TIME IN</button>
 
-            <label for="employeeName">Employee Name</label>
-            <input
-                type="text"
-                id="employeeName"
-                placeholder="Enter Employee Name"
-                required
-            >
+<p id="result"></p>
 
-            <input type="submit" value="TIME IN">
+<br>
 
-        </form>
+<a href="dashboard.html">BACK TO DASHBOARD</a>
 
-        <p id="result"></p>
+<script>
 
-        <a href="dashboard.html" class="back">
-            ← Back to Dashboard
-        </a>
+function timeIn() {
 
-    </div>
+    let id = document.getElementById("employeeId").value;
+    let name = document.getElementById("employeeName").value;
 
-    <script>
+    if (id === "" || name === "") {
+        alert("Please enter Employee ID and Employee Name.");
+        return;
+    }
 
-        function saveTimeIn() {
+    let records = JSON.parse(localStorage.getItem("attendanceRecords")) || [];
 
-            var id = document.getElementById("employeeId").value;
-            var name = document.getElementById("employeeName").value;
+    let alreadyTimedIn = records.find(function(record) {
+        return record.employeeId === id && record.timeOut === "";
+    });
 
-            var now = new Date();
+    if (alreadyTimedIn) {
+        alert("This employee is already timed in.");
+        return;
+    }
 
-            var attendance = {
-                employeeId: id,
-                employeeName: name,
-                timeIn: now.toLocaleString()
-            };
+    let now = new Date();
 
-            // Kunin ang existing attendance records
-            var records =
-                JSON.parse(localStorage.getItem("attendance")) || [];
+    let record = {
+        employeeId: id,
+        employeeName: name,
+        date: now.toLocaleDateString(),
+        timeIn: now.toLocaleTimeString(),
+        timeOut: "",
+        status: "Present"
+    };
 
-            // Idagdag ang bagong time-in
-            records.push(attendance);
+    records.push(record);
 
-            // I-save sa localStorage
-            localStorage.setItem(
-                "attendance",
-                JSON.stringify(records)
-            );
+    localStorage.setItem("attendanceRecords", JSON.stringify(records));
 
-            // Message
-            document.getElementById("result").innerHTML =
-                "✓ Time In successful!<br>" +
-                name + " - " +
-                now.toLocaleTimeString();
+    document.getElementById("result").innerHTML =
+        "TIME IN SUCCESSFUL!<br>" +
+        name + "<br>" +
+        record.timeIn;
 
-            // Clear fields
-            document.getElementById("employeeId").value = "";
-            document.getElementById("employeeName").value = "";
+    document.getElementById("employeeId").value = "";
+    document.getElementById("employeeName").value = "";
+}
 
-            return false;
-        }
-
-    </script>
+</script>
 
 </body>
 </html>
-
