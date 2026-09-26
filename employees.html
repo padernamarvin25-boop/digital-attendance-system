@@ -1,210 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Employee Registration</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Registration</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-        body {
-            margin: 0;
-            background: #f4f7fb;
-            color: #1f2937;
-        }
+body {
+    margin: 0;
+    background: #f3f6fa;
+}
 
-        .header {
-            background: #1e3a8a;
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+header {
+    background: #12355b;
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
 
-        .header h1 {
-            margin: 0 0 8px;
-        }
+header h1 {
+    margin: 0;
+    font-size: 27px;
+}
 
-        .container {
-            max-width: 950px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
+header p {
+    margin: 7px 0 0;
+    font-size: 14px;
+}
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-        }
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
 
-        h2 {
-            color: #1e3a8a;
-            margin-top: 0;
-        }
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+h2 {
+    color: #12355b;
+    margin-top: 0;
+}
 
-        input {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 15px;
-        }
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #12355b;
+}
 
-        input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
 
-        .save-button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #12355b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .save-button:hover {
-            background: #1d4ed8;
-        }
+button:hover {
+    background: #0d2946;
+}
 
-        .table-container {
-            overflow-x: auto;
-        }
+.table-container {
+    overflow-x: auto;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 700px;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        th {
-            background: #1e3a8a;
-            color: white;
-            padding: 13px;
-            text-align: left;
-        }
+th {
+    background: #12355b;
+    color: white;
+    padding: 11px;
+    text-align: left;
+}
 
-        td {
-            padding: 13px;
-            border-bottom: 1px solid #e5e7eb;
-        }
+td {
+    padding: 11px;
+    border-bottom: 1px solid #ddd;
+}
 
-        .edit-button {
-            background: #f59e0b;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+.action-btn {
+    width: auto;
+    margin: 2px;
+    padding: 7px 10px;
+    font-size: 12px;
+}
 
-        .delete-button {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+.delete {
+    background: #d62828;
+}
 
-        .empty {
-            text-align: center;
-            color: #6b7280;
-        }
-
-        @media (max-width: 650px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+.back-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 11px 18px;
+    background: #12355b;
+    color: white;
+    text-decoration: none;
+    border-radius: 7px;
+    font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
-<div class="header">
+<header>
     <h1>Digital Attendance System</h1>
-    <p>Faculty and Staff Employee Registration</p>
-</div>
+    <p>Employee Registration</p>
+</header>
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <h2>Register Employee</h2>
+    <h2>Register Employee</h2>
 
-        <div class="form-grid">
+    <label>Employee ID</label>
+    <input type="text" id="employeeId"
+           placeholder="Enter Employee ID">
 
-            <input
-                type="text"
-                id="employeeId"
-                placeholder="Employee ID">
+    <label>Employee Name</label>
+    <input type="text" id="employeeName"
+           placeholder="Enter Employee Name">
 
-            <input
-                type="text"
-                id="employeeName"
-                placeholder="Employee Name">
+    <label>Position</label>
+    <input type="text" id="position"
+           placeholder="Enter Position">
 
-            <input
-                type="text"
-                id="position"
-                placeholder="Position">
+    <label>Department</label>
+    <input type="text" id="department"
+           placeholder="Enter Department">
 
-            <input
-                type="text"
-                id="department"
-                placeholder="Department">
+    <label>Personal Password</label>
+    <input type="password" id="password"
+           placeholder="Create Password">
 
-        </div>
+    <button id="saveButton">
+        SAVE EMPLOYEE
+    </button>
 
-        <button
-            type="button"
-            class="save-button"
-            id="saveButton">
-            SAVE EMPLOYEE
-        </button>
+</div>
 
-    </div>
 
-    <div class="card">
+<div class="card">
 
-        <h2>Registered Employees</h2>
+    <h2>Registered Employees</h2>
 
-        <div class="table-container">
+    <div class="table-container">
 
-            <table>
+        <table>
 
-                <thead>
-                    <tr>
-                        <th>Employee ID</th>
-                        <th>Employee Name</th>
-                        <th>Position</th>
-                        <th>Department</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-                <tbody id="employeeTable"></tbody>
+            <tbody id="employeeTable"></tbody>
 
-            </table>
-
-        </div>
+        </table>
 
     </div>
+
+    <a href="dashboard.html" class="back-btn">
+        ← BACK TO DASHBOARD
+    </a>
+
+</div>
 
 </div>
 
@@ -212,58 +205,70 @@
 
 let editIndex = -1;
 
-
-/* SAVE / UPDATE */
-
-document.getElementById("saveButton").addEventListener("click", function() {
-
-    let id =
-        document.getElementById("employeeId").value.trim();
-
-    let name =
-        document.getElementById("employeeName").value.trim();
-
-    let position =
-        document.getElementById("position").value.trim();
-
-    let department =
-        document.getElementById("department").value.trim();
+const saveButton =
+    document.getElementById("saveButton");
 
 
-    if (
-        id === "" ||
-        name === "" ||
-        position === "" ||
-        department === ""
-    ) {
+saveButton.addEventListener("click", function() {
+
+    const id =
+        document.getElementById("employeeId")
+        .value.trim();
+
+    const name =
+        document.getElementById("employeeName")
+        .value.trim();
+
+    const position =
+        document.getElementById("position")
+        .value.trim();
+
+    const department =
+        document.getElementById("department")
+        .value.trim();
+
+    const password =
+        document.getElementById("password")
+        .value.trim();
+
+
+    if (!id || !name || !position ||
+        !department || !password) {
+
         return;
     }
 
 
     let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
 
-
-    /* NEW EMPLOYEE */
 
     if (editIndex === -1) {
 
-        let existing =
-            employees.find(function(employee) {
-                return employee.id === id;
+        const duplicate =
+            employees.some(function(emp) {
+
+                return String(emp.id).toLowerCase()
+                    === id.toLowerCase();
+
             });
 
 
-        if (existing) {
+        if (duplicate) {
             return;
         }
 
 
         employees.push({
+
             id: id,
             name: name,
             position: position,
-            department: department
+            department: department,
+            password: password
+
         });
 
 
@@ -273,174 +278,169 @@ document.getElementById("saveButton").addEventListener("click", function() {
         );
 
 
-        /* DIRECT TO TIME IN */
-
         window.location.href = "timein.html";
 
-        return;
+    } else {
+
+        employees[editIndex] = {
+
+            id: id,
+            name: name,
+            position: position,
+            department: department,
+            password: password
+
+        };
+
+
+        localStorage.setItem(
+            "employees",
+            JSON.stringify(employees)
+        );
+
+
+        editIndex = -1;
+
+        saveButton.textContent =
+            "SAVE EMPLOYEE";
+
+        clearForm();
+
+        displayEmployees();
+
     }
-
-
-    /* EDIT EMPLOYEE */
-
-    employees[editIndex] = {
-        id: id,
-        name: name,
-        position: position,
-        department: department
-    };
-
-
-    localStorage.setItem(
-        "employees",
-        JSON.stringify(employees)
-    );
-
-
-    editIndex = -1;
-
-    document.getElementById("saveButton").innerHTML =
-        "SAVE EMPLOYEE";
-
-    clearForm();
-
-    displayEmployees();
 
 });
 
 
-/* DISPLAY EMPLOYEES */
-
 function displayEmployees() {
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
 
-    let table =
+    const table =
         document.getElementById("employeeTable");
 
     table.innerHTML = "";
 
 
-    if (employees.length === 0) {
+    employees.forEach(function(emp, index) {
 
-        let row = table.insertRow();
+        const row =
+            document.createElement("tr");
 
-        let cell = row.insertCell(0);
+        row.innerHTML = `
 
-        cell.colSpan = 5;
+            <td>${emp.id}</td>
 
-        cell.className = "empty";
+            <td>${emp.name}</td>
 
-        cell.innerHTML =
-            "No registered employees yet.";
+            <td>${emp.position}</td>
 
-        return;
-    }
+            <td>${emp.department}</td>
 
+            <td>
 
-    employees.forEach(function(employee, index) {
+                <button
+                    class="action-btn"
+                    onclick="editEmployee(${index})">
+                    Edit
+                </button>
 
-        let row = table.insertRow();
+                <button
+                    class="action-btn delete"
+                    onclick="deleteEmployee(${index})">
+                    Delete
+                </button>
 
-        row.insertCell(0).innerHTML =
-            employee.id;
+            </td>
 
-        row.insertCell(1).innerHTML =
-            employee.name;
+        `;
 
-        row.insertCell(2).innerHTML =
-            employee.position;
-
-        row.insertCell(3).innerHTML =
-            employee.department;
-
-        row.insertCell(4).innerHTML =
-            '<button class="edit-button" onclick="editEmployee(' +
-            index +
-            ')">EDIT</button> ' +
-
-            '<button class="delete-button" onclick="deleteEmployee(' +
-            index +
-            ')">DELETE</button>';
+        table.appendChild(row);
 
     });
+
 }
 
 
-/* EDIT */
-
 function editEmployee(index) {
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
 
-    let employee =
-        employees[index];
+    const emp = employees[index];
 
 
     document.getElementById("employeeId").value =
-        employee.id;
+        emp.id;
 
     document.getElementById("employeeName").value =
-        employee.name;
+        emp.name;
 
     document.getElementById("position").value =
-        employee.position;
+        emp.position;
 
     document.getElementById("department").value =
-        employee.department;
+        emp.department;
+
+    document.getElementById("password").value =
+        emp.password || "";
 
 
     editIndex = index;
 
-
-    document.getElementById("saveButton").innerHTML =
+    saveButton.textContent =
         "UPDATE EMPLOYEE";
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
 
 }
 
 
-/* DELETE */
-
 function deleteEmployee(index) {
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    if (!confirm("Delete this employee?")) {
+        return;
+    }
+
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
 
     employees.splice(index, 1);
+
 
     localStorage.setItem(
         "employees",
         JSON.stringify(employees)
     );
 
+
     displayEmployees();
 
 }
 
 
-/* CLEAR */
-
 function clearForm() {
 
     document.getElementById("employeeId").value = "";
+
     document.getElementById("employeeName").value = "";
+
     document.getElementById("position").value = "";
+
     document.getElementById("department").value = "";
 
-    editIndex = -1;
+    document.getElementById("password").value = "";
 
 }
 
-
-/* LOAD */
 
 displayEmployees();
 
