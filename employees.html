@@ -60,16 +60,19 @@ label {
     color: #12355b;
 }
 
-input {
+input,
+select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 15px;
     outline: none;
+    background: white;
 }
 
-input:focus {
+input:focus,
+select:focus {
     border-color: #12355b;
 }
 
@@ -83,7 +86,7 @@ input:focus {
 }
 
 .eye-btn {
-    width: 48px !important;
+    width: 50px !important;
     margin-top: 0 !important;
     padding: 10px !important;
     background: #e9eef4 !important;
@@ -182,20 +185,31 @@ td {
         placeholder="Enter Employee Name">
 
     <label>Position</label>
-    <input
-        type="text"
-        id="position"
-        placeholder="Enter Position">
+
+    <select id="position">
+        <option value="">Select Position</option>
+        <option value="Faculty">Faculty</option>
+        <option value="Staff">Staff</option>
+    </select>
+
 
     <label>Department</label>
-    <input
-        type="text"
-        id="department"
-        placeholder="Enter Department">
+
+    <select id="department">
+        <option value="">Select Department</option>
+        <option value="BSCRIM">BSCRIM</option>
+        <option value="BSIT">BSIT</option>
+        <option value="BSHM">BSHM</option>
+        <option value="BSED">BSED</option>
+        <option value="BSBA">BSBA</option>
+        <option value="BEED">BEED</option>
+    </select>
+
 
     <label>Personal Password</label>
 
     <div class="password-box">
+
         <input
             type="password"
             id="password"
@@ -207,7 +221,9 @@ td {
             onclick="togglePassword('password', this)">
             👁
         </button>
+
     </div>
+
 
     <button id="saveButton">
         SAVE EMPLOYEE
@@ -225,6 +241,7 @@ td {
         <table>
 
             <thead>
+
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -232,6 +249,7 @@ td {
                     <th>Department</th>
                     <th>Action</th>
                 </tr>
+
             </thead>
 
             <tbody id="employeeTable"></tbody>
@@ -239,6 +257,7 @@ td {
         </table>
 
     </div>
+
 
     <a href="dashboard.html" class="back-btn">
         ← BACK TO DASHBOARD
@@ -248,6 +267,7 @@ td {
 
 </div>
 
+
 <script>
 
 let editIndex = -1;
@@ -256,7 +276,7 @@ const saveButton =
     document.getElementById("saveButton");
 
 
-/* SHOW / HIDE PASSWORD */
+/* VIEW / HIDE PASSWORD */
 
 function togglePassword(id, button) {
 
@@ -266,14 +286,17 @@ function togglePassword(id, button) {
     if (input.type === "password") {
 
         input.type = "text";
+
         button.textContent = "🙈";
 
     } else {
 
         input.type = "password";
+
         button.textContent = "👁";
 
     }
+
 }
 
 
@@ -291,21 +314,29 @@ saveButton.addEventListener("click", function() {
 
     const position =
         document.getElementById("position")
-        .value.trim();
+        .value;
 
     const department =
         document.getElementById("department")
-        .value.trim();
+        .value;
 
     const password =
         document.getElementById("password")
         .value.trim();
 
 
-    if (!id || !name || !position ||
-        !department || !password) {
+    /* CHECK EMPTY FIELDS */
+
+    if (
+        !id ||
+        !name ||
+        !position ||
+        !department ||
+        !password
+    ) {
 
         return;
+
     }
 
 
@@ -314,6 +345,8 @@ saveButton.addEventListener("click", function() {
             localStorage.getItem("employees") || "[]"
         );
 
+
+    /* ADD NEW EMPLOYEE */
 
     if (editIndex === -1) {
 
@@ -327,16 +360,22 @@ saveButton.addEventListener("click", function() {
 
 
         if (duplicate) {
+
             return;
+
         }
 
 
         employees.push({
 
             id: id,
+
             name: name,
+
             position: position,
+
             department: department,
+
             password: password
 
         });
@@ -348,16 +387,26 @@ saveButton.addEventListener("click", function() {
         );
 
 
+        /* DIRECTLY GO TO TIME IN */
+
         window.location.href = "timein.html";
 
+
     } else {
+
+
+        /* UPDATE EMPLOYEE */
 
         employees[editIndex] = {
 
             id: id,
+
             name: name,
+
             position: position,
+
             department: department,
+
             password: password
 
         };
@@ -403,6 +452,7 @@ function displayEmployees() {
         const row =
             document.createElement("tr");
 
+
         row.innerHTML = `
 
             <td>${emp.id}</td>
@@ -431,6 +481,7 @@ function displayEmployees() {
 
         `;
 
+
         table.appendChild(row);
 
     });
@@ -438,7 +489,7 @@ function displayEmployees() {
 }
 
 
-/* EDIT */
+/* EDIT EMPLOYEE */
 
 function editEmployee(index) {
 
@@ -446,6 +497,7 @@ function editEmployee(index) {
         JSON.parse(
             localStorage.getItem("employees") || "[]"
         );
+
 
     const emp =
         employees[index];
@@ -469,18 +521,21 @@ function editEmployee(index) {
 
     editIndex = index;
 
+
     saveButton.textContent =
         "UPDATE EMPLOYEE";
 
 }
 
 
-/* DELETE */
+/* DELETE EMPLOYEE */
 
 function deleteEmployee(index) {
 
     if (!confirm("Delete this employee?")) {
+
         return;
+
     }
 
 
@@ -504,7 +559,7 @@ function deleteEmployee(index) {
 }
 
 
-/* CLEAR */
+/* CLEAR FORM */
 
 function clearForm() {
 
@@ -520,6 +575,8 @@ function clearForm() {
 
 }
 
+
+/* LOAD EMPLOYEES */
 
 displayEmployees();
 
