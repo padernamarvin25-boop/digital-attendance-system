@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Daily Attendance</title>
 
 <style>
@@ -52,7 +51,13 @@ header p {
     margin-top: 0;
 }
 
-/* SMALL SUMMARY BOXES */
+.date-today {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+/* SMALL TOTAL BOXES */
 
 .summary {
     display: flex;
@@ -88,7 +93,7 @@ header p {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 th {
@@ -139,12 +144,6 @@ tr:hover {
 .back-btn:hover {
     background: #0d2946;
 }
-
-.date-today {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
 </style>
 </head>
 
@@ -157,198 +156,127 @@ tr:hover {
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <h2>Today's Attendance</h2>
+    <h2>Today's Attendance</h2>
 
-        <div class="date-today" id="todayDate"></div>
+    <div class="date-today" id="todayDate"></div>
 
-        <!-- SUMMARY -->
+    <div class="summary">
 
-        <div class="summary">
-
-            <div class="summary-box">
-                <h3>TOTAL PRESENT</h3>
-                <p id="totalPresent">0</p>
-            </div>
-
-            <div class="summary-box">
-                <h3>TOTAL ABSENT</h3>
-                <p id="totalAbsent">0</p>
-            </div>
-
+        <div class="summary-box">
+            <h3>TOTAL PRESENT</h3>
+            <p id="totalPresent">0</p>
         </div>
 
-
-        <!-- TABLE -->
-
-        <div class="table-container">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Employee ID</th>
-                        <th>Employee Name</th>
-                        <th>Date</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="attendanceTable">
-                </tbody>
-
-            </table>
-
+        <div class="summary-box">
+            <h3>TOTAL ABSENT</h3>
+            <p id="totalAbsent">0</p>
         </div>
-
-
-        <a href="dashboard.html" class="back-btn">
-            ← BACK TO DASHBOARD
-        </a>
 
     </div>
 
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Date</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="attendanceTable"></tbody>
+
+        </table>
+
+    </div>
+
+    <a href="dashboard.html" class="back-btn">
+        ← BACK TO DASHBOARD
+    </a>
+
 </div>
 
+</div>
 
 <script>
 
-/* GET TODAY'S DATE */
+/* TODAY KEY */
 
 function getToday() {
 
     const now = new Date();
 
-    const year = now.getFullYear();
-
-    const month =
-        String(now.getMonth() + 1)
-        .padStart(2, "0");
-
-    const day =
-        String(now.getDate())
-        .padStart(2, "0");
-
-    return ${year}-${month}-${day};
+    return (
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0")
+    );
 }
 
 
-/* DISPLAY TODAY'S DATE */
+/* TODAY'S DISPLAY DATE */
 
-function displayTodayDate() {
+function displayToday() {
 
-    const today = new Date();
+    const now = new Date();
 
     document.getElementById("todayDate").textContent =
-        today.toLocaleDateString(
-            undefined,
-            {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }
-        );
+        now.toLocaleDateString(undefined, {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
 }
 
 
-/* LOAD ATTENDANCE */
+/* LOAD RECORDS */
 
 function loadAttendance() {
 
     const records =
         JSON.parse(
-            localStorage.getItem("attendanceRecords")
-        ) || [];
-
+            localStorage.getItem("attendanceRecords") || "[]"
+        );
 
     const today = getToday();
 
+    const todayRecords = records.filter(function(record) {
 
-    /*
-       SHOW TODAY ONLY
-    */
+        return record.attendanceDate === today;
 
-    const todayRecords =
-        records.filter(function(record) {
-
-            /*
-               New records use attendanceDate.
-            */
-
-            if (record.attendanceDate) {
-
-                return record.attendanceDate === today;
-
-            }
+    });
 
 
-            /*
-               Compatibility with older records
-               that don't have attendanceDate.
-            */
-
-            if (record.date) {
-
-                const parts =
-                    record.date.split("/");
-
-                if (parts.length === 3) {
-
-                    const month =
-                        String(
-                            parseInt(parts[0])
-                        ).padStart(2, "0");
-
-                    const day =
-                        String(
-                            parseInt(parts[1])
-                        ).padStart(2, "0");
-
-                    const year =
-                        parts[2];
-
-                    const oldDate =
-                        ${year}-${month}-${day};
-
-                    return oldDate === today;
-                }
-
-            }
-
-            return false;
-
-        });
-
-
-    /*
-       SORT ALPHABETICALLY BY NAME
-    */
+    /* SORT BY NAME */
 
     todayRecords.sort(function(a, b) {
 
-        return a.employeeName.localeCompare(
-            b.employeeName
-        );
+        return String(a.employeeName || "")
+            .localeCompare(
+                String(b.employeeName || "")
+            );
 
     });
 
 
     const table =
-        document.getElementById(
-            "attendanceTable"
-        );
-
+        document.getElementById("attendanceTable");
 
     table.innerHTML = "";
 
 
-    let present = 0;
-
-    let absent = 0;
+    let totalPresent = 0;
+    let totalAbsent = 0;
 
 
     if (todayRecords.length === 0) {
@@ -367,15 +295,11 @@ function loadAttendance() {
     todayRecords.forEach(function(record) {
 
         if (record.status === "Present") {
-
-            present++;
-
+            totalPresent++;
         }
 
         if (record.status === "Absent") {
-
-            absent++;
-
+            totalAbsent++;
         }
 
 
@@ -383,24 +307,16 @@ function loadAttendance() {
             document.createElement("tr");
 
 
-        let statusClass = "";
-
-        if (record.status === "Present") {
-
-            statusClass = "present";
-
-        } else if (record.status === "Absent") {
-
-            statusClass = "absent";
-
-        }
+        const statusClass =
+            record.status === "Present"
+                ? "present"
+                : "absent";
 
 
         row.innerHTML = `
+            <td>${record.employeeId || ""}</td>
 
-            <td>${record.employeeId}</td>
-
-            <td>${record.employeeName}</td>
+            <td>${record.employeeName || ""}</td>
 
             <td>${record.date || ""}</td>
 
@@ -411,7 +327,6 @@ function loadAttendance() {
             <td class="status ${statusClass}">
                 ${record.status || ""}
             </td>
-
         `;
 
 
@@ -420,37 +335,30 @@ function loadAttendance() {
     });
 
 
-    document.getElementById(
-        "totalPresent"
-    ).textContent = present;
+    document.getElementById("totalPresent").textContent =
+        totalPresent;
 
-
-    document.getElementById(
-        "totalAbsent"
-    ).textContent = absent;
-
+    document.getElementById("totalAbsent").textContent =
+        totalAbsent;
 }
 
 
 /* START */
 
-displayTodayDate();
-
+displayToday();
 loadAttendance();
 
 
 /*
-   Automatically refresh the page data
-   when returning to this page.
+   Refresh records whenever the page
+   becomes active again.
 */
 
-window.addEventListener(
-    "storage",
-    loadAttendance
-);
+window.addEventListener("focus", function() {
+    loadAttendance();
+});
 
 </script>
 
 </body>
 </html>
-
