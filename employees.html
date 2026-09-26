@@ -101,7 +101,10 @@
 
 <script>
 
-function addEmployee() {
+let employees =
+    JSON.parse(localStorage.getItem("employees")) || [];
+
+function saveEmployee() {
 
     let id = document.getElementById("employeeId").value;
     let name = document.getElementById("employeeName").value;
@@ -113,26 +116,62 @@ function addEmployee() {
         return;
     }
 
-    let table = document.getElementById("employeeTable");
+    let existing = employees.find(function(employee) {
+        return employee.id === id;
+    });
 
-    let row = table.insertRow();
+    if (existing) {
+        alert("Employee ID already exists.");
+        return;
+    }
 
-    row.insertCell(0).innerHTML = id;
-    row.insertCell(1).innerHTML = name;
-    row.insertCell(2).innerHTML = position;
-    row.insertCell(3).innerHTML = department;
+    employees.push({
+        id: id,
+        name: name,
+        position: position,
+        department: department
+    });
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+    alert("Employee registered successfully!");
 
     document.getElementById("employeeId").value = "";
     document.getElementById("employeeName").value = "";
     document.getElementById("position").value = "";
     document.getElementById("department").value = "";
+
+    displayEmployees();
 }
 
-function goBack() {
-    window.location.href = "dashboard.html";
+function displayEmployees() {
+
+    let table =
+        document.getElementById("employeeTable");
+
+    if (!table) return;
+
+    table.innerHTML = "";
+
+    employees.forEach(function(employee) {
+
+        let row = table.insertRow();
+
+        row.insertCell(0).innerHTML = employee.id;
+        row.insertCell(1).innerHTML = employee.name;
+        row.insertCell(2).innerHTML = employee.position;
+        row.insertCell(3).innerHTML = employee.department;
+
+    });
 }
+
+displayEmployees();
 
 </script>
+
 
 </body>
 </html>
