@@ -2,127 +2,205 @@
 <html>
 <head>
     <title>Employee Registration</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1e3a8a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1e3a8a;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .btn {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save {
+            background: #2563eb;
+            color: white;
+            margin-top: 18px;
+        }
+
+        .edit {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .back {
+            display: inline-block;
+            background: #374151;
+            color: white;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #1e3a8a;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .empty {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        @media (max-width: 650px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin: 15px auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Employee Registration</h1>
+<div class="header">
+    <h1>Digital Attendance System</h1>
+    <p>Faculty and Staff Employee Management</p>
+</div>
 
-<p>Employee ID</p>
-<input type="text" id="employeeId">
+<div class="container">
 
-<p>Employee Name</p>
-<input type="text" id="employeeName">
+    <div class="card">
 
-<p>Position</p>
-<input type="text" id="position">
+        <h2>Employee Registration</h2>
 
-<p>Department</p>
-<input type="text" id="department">
+        <div class="form-grid">
 
-<br><br>
+            <input
+                type="text"
+                id="employeeId"
+                placeholder="Employee ID">
 
-<button onclick="saveEmployee()">SAVE EMPLOYEE</button>
+            <input
+                type="text"
+                id="employeeName"
+                placeholder="Employee Name">
 
-<br><br>
+            <input
+                type="text"
+                id="position"
+                placeholder="Position">
 
-<h2>Registered Employees</h2>
+            <input
+                type="text"
+                id="department"
+                placeholder="Department">
 
-<table border="1" width="100%" cellpadding="10">
+        </div>
 
-    <thead>
-        <tr>
-            <th>Employee ID</th>
-            <th>Employee Name</th>
-            <th>Position</th>
-            <th>Department</th>
-        </tr>
-    </thead>
+        <button
+            class="btn save"
+            onclick="saveEmployee()"
+            id="saveButton">
+            SAVE EMPLOYEE
+        </button>
 
-    <tbody id="employeeTable">
-    </tbody>
-
-</table>
-
-<br>
-
-<a href="dashboard.html">BACK TO DASHBOARD</a>
-
-<script>
-
-function saveEmployee() {
-
-    let id = document.getElementById("employeeId").value;
-    let name = document.getElementById("employeeName").value;
-    let position = document.getElementById("position").value;
-    let department = document.getElementById("department").value;
-
-    if (id === "" || name === "" || position === "" || department === "") {
-        alert("Please complete all fields.");
-        return;
-    }
-
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
-
-    let existing = employees.find(function(employee) {
-        return employee.id === id;
-    });
-
-    if (existing) {
-        alert("Employee ID already exists.");
-        return;
-    }
-
-    employees.push({
-        id: id,
-        name: name,
-        position: position,
-        department: department
-    });
-
-    localStorage.setItem(
-        "employees",
-        JSON.stringify(employees)
-    );
-
-    alert("Employee registered successfully!");
-
-    document.getElementById("employeeId").value = "";
-    document.getElementById("employeeName").value = "";
-    document.getElementById("position").value = "";
-    document.getElementById("department").value = "";
-
-    displayEmployees();
-}
+    </div>
 
 
-function displayEmployees() {
+    <div class="card">
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+        <h2>Registered Employees</h2>
 
-    let table =
-        document.getElementById("employeeTable");
+        <div class="table-container">
 
-    table.innerHTML = "";
+            <table>
 
-    employees.forEach(function(employee) {
-
-        let row = table.insertRow();
-
-        row.insertCell(0).innerHTML = employee.id;
-        row.insertCell(1).innerHTML = employee.name;
-        row.insertCell(2).innerHTML = employee.position;
-        row.insertCell(3).innerHTML = employee.department;
-
-    });
-}
-
-
-displayEmployees();
-
-</script>
-
-</body>
-</html>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
