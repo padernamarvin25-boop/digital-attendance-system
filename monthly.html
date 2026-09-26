@@ -137,11 +137,18 @@ function showMonthlyRecord() {
 
             let attendance = records.find(function(record) {
 
-                return record.employeeId === employee.id &&
-                       record.date === dateString;
+    if (record.employeeId !== employee.id) {
+        return false;
+    }
 
-            });
+    let recordDate = new Date(record.date);
 
+    return !isNaN(recordDate) &&
+           recordDate.getFullYear() === year &&
+           recordDate.getMonth() === month - 1 &&
+           recordDate.getDate() === day;
+
+});
             let row = monthlyTable.insertRow();
 
             row.insertCell(0).innerHTML =
