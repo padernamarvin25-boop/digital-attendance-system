@@ -16,15 +16,61 @@
 
 <br><br>
 
-<button type="button" onclick="alert('TIME OUT BUTTON WORKS!')">
-    TIME OUT
-</button>
+<button onclick="timeOut()">TIME OUT</button>
 
-<br><br>
+<p id="result"></p>
 
-<a href="dashboard.html">
-    BACK TO DASHBOARD
-</a>
+<br>
+
+<a href="dashboard.html">BACK TO DASHBOARD</a>
+
+<script>
+
+function timeOut() {
+
+    let id = document.getElementById("employeeId").value;
+    let name = document.getElementById("employeeName").value;
+
+    if (id === "" || name === "") {
+        alert("Please enter Employee ID and Employee Name.");
+        return;
+    }
+
+    let records = JSON.parse(
+        localStorage.getItem("attendanceRecords")
+    ) || [];
+
+    let record = records.find(function(item) {
+        return item.employeeId === id &&
+               item.employeeName === name &&
+               item.timeOut === "";
+    });
+
+    if (!record) {
+        alert("No active Time In record found for this employee.");
+        return;
+    }
+
+    let now = new Date();
+
+    record.timeOut = now.toLocaleTimeString();
+    record.status = "Present";
+
+    localStorage.setItem(
+        "attendanceRecords",
+        JSON.stringify(records)
+    );
+
+    document.getElementById("result").innerHTML =
+        "TIME OUT SUCCESSFUL!<br>" +
+        name + "<br>" +
+        record.timeOut;
+
+    document.getElementById("employeeId").value = "";
+    document.getElementById("employeeName").value = "";
+}
+
+</script>
 
 </body>
 </html>
