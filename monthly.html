@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance Record</title>
+<title>Monthly Record</title>
 
 <style>
 * {
@@ -37,17 +37,17 @@ header h1 {
 
 .card {
     background: white;
-    border-radius: 12px;
     padding: 25px;
+    border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 h2 {
-    margin-top: 0;
     color: #0b1f3a;
+    margin-top: 0;
 }
 
-/* DEPARTMENT FOLDERS */
+/* FOLDER */
 
 .folder-container {
     display: grid;
@@ -67,8 +67,8 @@ h2 {
 }
 
 .folder:hover {
-    transform: translateY(-3px);
     background: #e3ebf4;
+    transform: translateY(-3px);
 }
 
 .folder-icon {
@@ -82,11 +82,14 @@ h2 {
     color: #0b1f3a;
 }
 
-/* TABLE VIEW */
+/* HIDDEN SECTIONS */
 
-#tableView {
+#employeeView,
+#recordView {
     display: none;
 }
+
+/* BUTTON */
 
 .back-btn {
     background: #0b1f3a;
@@ -102,6 +105,8 @@ h2 {
     background: #163b6d;
 }
 
+/* TABLE */
+
 .table-wrapper {
     overflow-x: auto;
 }
@@ -109,7 +114,7 @@ h2 {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 th {
@@ -128,6 +133,20 @@ tr:hover {
     background: #f5f7fa;
 }
 
+/* CLICKABLE NAME */
+
+.employee-name {
+    color: #0b1f3a;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.employee-name:hover {
+    text-decoration: underline;
+}
+
+/* STATUS */
+
 .present {
     color: green;
     font-weight: bold;
@@ -138,25 +157,41 @@ tr:hover {
     font-weight: bold;
 }
 
+/* MONTH SELECT */
+
+.month-box {
+    margin: 15px 0 20px;
+}
+
+.month-box label {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+select {
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
 .no-record {
     text-align: center;
-    padding: 25px;
     color: #777;
+    padding: 25px;
+}
+
+.dashboard-btn {
+    margin-top: 20px;
 }
 
 @media(max-width: 600px) {
-    header h1 {
-        font-size: 20px;
-    }
 
-    .container {
-        width: 96%;
-    }
-
-    th, td {
+    th,
+    td {
         font-size: 13px;
         padding: 9px;
     }
+
 }
 </style>
 </head>
@@ -164,67 +199,82 @@ tr:hover {
 <body>
 
 <header>
-    <h1>Attendance Record</h1>
+    <h1>Monthly Attendance Record</h1>
 </header>
+
 
 <div class="container">
 
-    <!-- DEPARTMENT FOLDERS -->
+    <!-- =========================
+         DEPARTMENT FOLDERS
+    ========================== -->
+
     <div class="card" id="departmentView">
 
         <h2>Select Department</h2>
 
         <div class="folder-container">
 
-            <div class="folder" onclick="openDepartment('BSCRIM')">
+            <div class="folder"
+                 onclick="openDepartment('BSCRIM')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSCRIM</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSIT')">
+            <div class="folder"
+                 onclick="openDepartment('BSIT')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSIT</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSHM')">
+            <div class="folder"
+                 onclick="openDepartment('BSHM')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSHM</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSED')">
+            <div class="folder"
+                 onclick="openDepartment('BSED')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSED</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSBA')">
+            <div class="folder"
+                 onclick="openDepartment('BSBA')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSBA</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BEED')">
+            <div class="folder"
+                 onclick="openDepartment('BEED')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BEED</div>
             </div>
 
         </div>
 
-        <br>
-
-        <button class="back-btn" onclick="goDashboard()">
+        <button class="back-btn dashboard-btn"
+                onclick="goDashboard()">
             ← Back to Dashboard
         </button>
 
     </div>
 
 
-    <!-- TABLE VIEW -->
-    <div class="card" id="tableView">
+    <!-- =========================
+         EMPLOYEE TABLE
+    ========================== -->
 
-        <button class="back-btn" onclick="backToDepartments()">
+    <div class="card" id="employeeView">
+
+        <button class="back-btn"
+                onclick="backToDepartments()">
             ← Back to Departments
         </button>
 
-        <h2 id="departmentTitle">Department Attendance</h2>
+        <h2 id="employeeTitle">
+            Registered Employees
+        </h2>
 
         <div class="table-wrapper">
 
@@ -234,14 +284,64 @@ tr:hover {
                     <tr>
                         <th>Employee ID</th>
                         <th>Employee Name</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+
+                <tbody id="employeeTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         EMPLOYEE MONTHLY RECORD
+    ========================== -->
+
+    <div class="card" id="recordView">
+
+        <button class="back-btn"
+                onclick="backToEmployees()">
+            ← Back to Employees
+        </button>
+
+        <h2 id="recordTitle">
+            Employee Monthly Record
+        </h2>
+
+        <div class="month-box">
+
+            <label for="monthSelect">
+                Select Month:
+            </label>
+
+            <select id="monthSelect"
+                    onchange="loadRecords()">
+            </select>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
                         <th>Date</th>
                         <th>Time In</th>
                         <th>Time Out</th>
                         <th>Status</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="attendanceTable">
+                <tbody id="recordTable">
                 </tbody>
 
             </table>
@@ -255,66 +355,71 @@ tr:hover {
 
 <script>
 
+let selectedDepartment = "";
+let selectedEmployee = null;
+
+
+/* =========================
+   OPEN DEPARTMENT
+========================= */
+
 function openDepartment(department) {
 
-    // Hide department folders
-    document.getElementById("departmentView").style.display = "none";
+    selectedDepartment = department;
 
-    // Show table
-    document.getElementById("tableView").style.display = "block";
+    document.getElementById("departmentView")
+        .style.display = "none";
 
-    // Change title
-    document.getElementById("departmentTitle").textContent =
-        department + " Attendance Record";
+    document.getElementById("employeeView")
+        .style.display = "block";
 
-    loadDepartmentRecords(department);
+    document.getElementById("recordView")
+        .style.display = "none";
+
+    document.getElementById("employeeTitle").textContent =
+        department + " Registered Employees";
+
+    loadEmployees(department);
 }
 
 
-function loadDepartmentRecords(department) {
+/* =========================
+   LOAD REGISTERED EMPLOYEES
+========================= */
+
+function loadEmployees(department) {
 
     const employees =
-        JSON.parse(localStorage.getItem("employees") || "[]");
-
-    const records =
-        JSON.parse(localStorage.getItem("attendanceRecords") || "[]");
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
 
     const table =
-        document.getElementById("attendanceTable");
+        document.getElementById("employeeTable");
 
     table.innerHTML = "";
 
-    /*
-       Match attendance records to employees
-       using Employee ID.
-    */
 
-    const departmentRecords = records.filter(record => {
-
-        const employee = employees.find(emp =>
-            String(emp.id) === String(record.employeeId)
+    const departmentEmployees =
+        employees
+        .filter(employee =>
+            employee.department === department
+        )
+        .sort((a, b) =>
+            String(a.name).localeCompare(
+                String(b.name)
+            )
         );
 
-        return employee &&
-               employee.department === department;
 
-    });
-
-
-    // Sort by employee name
-    departmentRecords.sort((a, b) =>
-        String(a.employeeName).localeCompare(
-            String(b.employeeName)
-        )
-    );
-
-
-    if (departmentRecords.length === 0) {
+    if (departmentEmployees.length === 0) {
 
         table.innerHTML = `
             <tr>
-                <td colspan="6" class="no-record">
-                    No attendance records found for ${department}.
+                <td colspan="4"
+                    class="no-record">
+                    No registered employees
+                    in ${department}.
                 </td>
             </tr>
         `;
@@ -323,25 +428,36 @@ function loadDepartmentRecords(department) {
     }
 
 
-    departmentRecords.forEach(record => {
+    departmentEmployees.forEach(employee => {
 
-        const row = document.createElement("tr");
+        const row =
+            document.createElement("tr");
 
-        const statusClass =
-            record.status === "Present"
-            ? "present"
-            : "absent";
 
         row.innerHTML = `
-            <td>${record.employeeId}</td>
-            <td>${record.employeeName}</td>
-            <td>${record.date || record.attendanceDate}</td>
-            <td>${record.timeIn || "-"}</td>
-            <td>${record.timeOut || "-"}</td>
-            <td class="${statusClass}">
-                ${record.status || "-"}
+
+            <td>
+                ${employee.id}
             </td>
+
+            <td
+                class="employee-name"
+                onclick="openEmployee('${employee.id}')">
+
+                ${employee.name}
+
+            </td>
+
+            <td>
+                ${employee.position || "-"}
+            </td>
+
+            <td>
+                ${employee.department}
+            </td>
+
         `;
+
 
         table.appendChild(row);
 
@@ -349,19 +465,306 @@ function loadDepartmentRecords(department) {
 }
 
 
+/* =========================
+   OPEN EMPLOYEE RECORD
+========================= */
+
+function openEmployee(employeeId) {
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+
+    selectedEmployee =
+        employees.find(employee =>
+            String(employee.id) ===
+            String(employeeId)
+        );
+
+
+    if (!selectedEmployee) {
+        return;
+    }
+
+
+    document.getElementById("employeeView")
+        .style.display = "none";
+
+    document.getElementById("recordView")
+        .style.display = "block";
+
+
+    document.getElementById("recordTitle").textContent =
+        selectedEmployee.name +
+        " - Monthly Attendance";
+
+
+    createMonthOptions();
+
+    loadRecords();
+}
+
+
+/* =========================
+   CREATE MONTH OPTIONS
+========================= */
+
+function createMonthOptions() {
+
+    const select =
+        document.getElementById("monthSelect");
+
+    select.innerHTML = "";
+
+
+    const records =
+        JSON.parse(
+            localStorage.getItem("attendanceRecords") || "[]"
+        );
+
+
+    const months = new Set();
+
+
+    records.forEach(record => {
+
+        if (
+            String(record.employeeId) ===
+            String(selectedEmployee.id)
+        ) {
+
+            if (record.attendanceDate) {
+
+                months.add(
+                    record.attendanceDate.substring(0, 7)
+                );
+
+            }
+
+        }
+
+    });
+
+
+    // Always include current month
+
+    const now = new Date();
+
+    const currentMonth =
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1)
+            .padStart(2, "0");
+
+
+    months.add(currentMonth);
+
+
+    Array.from(months)
+        .sort()
+        .reverse()
+        .forEach(month => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = month;
+
+            option.textContent =
+                formatMonth(month);
+
+            select.appendChild(option);
+
+        });
+
+
+    select.value = currentMonth;
+}
+
+
+/* =========================
+   FORMAT MONTH
+========================= */
+
+function formatMonth(month) {
+
+    const parts =
+        month.split("-");
+
+    const year =
+        Number(parts[0]);
+
+    const monthNumber =
+        Number(parts[1]) - 1;
+
+
+    const date =
+        new Date(
+            year,
+            monthNumber,
+            1
+        );
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "long",
+            year: "numeric"
+        }
+    );
+}
+
+
+/* =========================
+   LOAD MONTHLY RECORD
+========================= */
+
+function loadRecords() {
+
+    const selectedMonth =
+        document.getElementById("monthSelect").value;
+
+
+    const records =
+        JSON.parse(
+            localStorage.getItem("attendanceRecords") || "[]"
+        );
+
+
+    const table =
+        document.getElementById("recordTable");
+
+    table.innerHTML = "";
+
+
+    const employeeRecords =
+        records.filter(record => {
+
+            return (
+                String(record.employeeId) ===
+                String(selectedEmployee.id)
+            )
+            &&
+            String(record.attendanceDate || "")
+                .startsWith(selectedMonth);
+
+        });
+
+
+    employeeRecords.sort((a, b) =>
+        String(a.attendanceDate)
+            .localeCompare(
+                String(b.attendanceDate)
+            )
+    );
+
+
+    if (employeeRecords.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="4"
+                    class="no-record">
+                    No attendance records
+                    for this month.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    employeeRecords.forEach(record => {
+
+        const row =
+            document.createElement("tr");
+
+
+        const statusClass =
+            record.status === "Present"
+            ? "present"
+            : "absent";
+
+
+        row.innerHTML = `
+
+            <td>
+                ${record.date ||
+                 record.attendanceDate ||
+                 "-"}
+            </td>
+
+            <td>
+                ${record.timeIn || "-"}
+            </td>
+
+            <td>
+                ${record.timeOut || "-"}
+            </td>
+
+            <td class="${statusClass}">
+                ${record.status || "-"}
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+}
+
+
+/* =========================
+   BACK TO DEPARTMENTS
+========================= */
+
 function backToDepartments() {
 
-    // Show folders again
-    document.getElementById("departmentView").style.display = "block";
+    document.getElementById("departmentView")
+        .style.display = "block";
 
-    // Hide table
-    document.getElementById("tableView").style.display = "none";
+    document.getElementById("employeeView")
+        .style.display = "none";
+
+    document.getElementById("recordView")
+        .style.display = "none";
 
 }
 
 
+/* =========================
+   BACK TO EMPLOYEES
+========================= */
+
+function backToEmployees() {
+
+    document.getElementById("departmentView")
+        .style.display = "none";
+
+    document.getElementById("employeeView")
+        .style.display = "block";
+
+    document.getElementById("recordView")
+        .style.display = "none";
+
+    loadEmployees(selectedDepartment);
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
 function goDashboard() {
-    window.location.href = "dashboard.html";
+
+    window.location.href =
+        "dashboard.html";
+
 }
 
 </script>
