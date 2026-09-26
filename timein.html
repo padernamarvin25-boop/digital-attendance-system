@@ -3,6 +3,538 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Registration</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f3f6fa;
+}
+
+header {
+    background: #12355b;
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 27px;
+}
+
+header p {
+    margin: 7px 0 0;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+h2 {
+    color: #12355b;
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #12355b;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #12355b;
+}
+
+.password-box {
+    display: flex;
+    gap: 8px;
+}
+
+.password-box input {
+    flex: 1;
+}
+
+.eye-btn {
+    width: 48px !important;
+    margin-top: 0 !important;
+    padding: 10px !important;
+    background: #e9eef4 !important;
+    color: #12355b !important;
+    font-size: 18px !important;
+}
+
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #12355b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d2946;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #12355b;
+    color: white;
+    padding: 11px;
+    text-align: left;
+}
+
+td {
+    padding: 11px;
+    border-bottom: 1px solid #ddd;
+}
+
+.action-btn {
+    width: auto;
+    margin: 2px;
+    padding: 7px 10px;
+    font-size: 12px;
+}
+
+.delete {
+    background: #d62828;
+}
+
+.delete:hover {
+    background: #b71f1f;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 11px 18px;
+    background: #12355b;
+    color: white;
+    text-decoration: none;
+    border-radius: 7px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Digital Attendance System</h1>
+    <p>Employee Registration</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>Register Employee</h2>
+
+    <label>Employee ID</label>
+    <input
+        type="text"
+        id="employeeId"
+        placeholder="Enter Employee ID">
+
+    <label>Employee Name</label>
+    <input
+        type="text"
+        id="employeeName"
+        placeholder="Enter Employee Name">
+
+    <label>Position</label>
+    <input
+        type="text"
+        id="position"
+        placeholder="Enter Position">
+
+    <label>Department</label>
+    <input
+        type="text"
+        id="department"
+        placeholder="Enter Department">
+
+    <label>Personal Password</label>
+
+    <div class="password-box">
+        <input
+            type="password"
+            id="password"
+            placeholder="Create Password">
+
+        <button
+            type="button"
+            class="eye-btn"
+            onclick="togglePassword('password', this)">
+            👁
+        </button>
+    </div>
+
+    <button id="saveButton">
+        SAVE EMPLOYEE
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Registered Employees</h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="employeeTable"></tbody>
+
+        </table>
+
+    </div>
+
+    <a href="dashboard.html" class="back-btn">
+        ← BACK TO DASHBOARD
+    </a>
+
+</div>
+
+</div>
+
+<script>
+
+let editIndex = -1;
+
+const saveButton =
+    document.getElementById("saveButton");
+
+
+/* SHOW / HIDE PASSWORD */
+
+function togglePassword(id, button) {
+
+    const input =
+        document.getElementById(id);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.textContent = "🙈";
+
+    } else {
+
+        input.type = "password";
+        button.textContent = "👁";
+
+    }
+}
+
+
+/* SAVE EMPLOYEE */
+
+saveButton.addEventListener("click", function() {
+
+    const id =
+        document.getElementById("employeeId")
+        .value.trim();
+
+    const name =
+        document.getElementById("employeeName")
+        .value.trim();
+
+    const position =
+        document.getElementById("position")
+        .value.trim();
+
+    const department =
+        document.getElementById("department")
+        .value.trim();
+
+    const password =
+        document.getElementById("password")
+        .value.trim();
+
+
+    if (!id || !name || !position ||
+        !department || !password) {
+
+        return;
+    }
+
+
+    let employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+
+    if (editIndex === -1) {
+
+        const duplicate =
+            employees.some(function(emp) {
+
+                return String(emp.id).toLowerCase()
+                    === id.toLowerCase();
+
+            });
+
+
+        if (duplicate) {
+            return;
+        }
+
+
+        employees.push({
+
+            id: id,
+            name: name,
+            position: position,
+            department: department,
+            password: password
+
+        });
+
+
+        localStorage.setItem(
+            "employees",
+            JSON.stringify(employees)
+        );
+
+
+        window.location.href = "timein.html";
+
+    } else {
+
+        employees[editIndex] = {
+
+            id: id,
+            name: name,
+            position: position,
+            department: department,
+            password: password
+
+        };
+
+
+        localStorage.setItem(
+            "employees",
+            JSON.stringify(employees)
+        );
+
+
+        editIndex = -1;
+
+        saveButton.textContent =
+            "SAVE EMPLOYEE";
+
+        clearForm();
+
+        displayEmployees();
+
+    }
+
+});
+
+
+/* DISPLAY EMPLOYEES */
+
+function displayEmployees() {
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+    const table =
+        document.getElementById("employeeTable");
+
+    table.innerHTML = "";
+
+
+    employees.forEach(function(emp, index) {
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>${emp.id}</td>
+
+            <td>${emp.name}</td>
+
+            <td>${emp.position}</td>
+
+            <td>${emp.department}</td>
+
+            <td>
+
+                <button
+                    class="action-btn"
+                    onclick="editEmployee(${index})">
+                    Edit
+                </button>
+
+                <button
+                    class="action-btn delete"
+                    onclick="deleteEmployee(${index})">
+                    Delete
+                </button>
+
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* EDIT */
+
+function editEmployee(index) {
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+    const emp =
+        employees[index];
+
+
+    document.getElementById("employeeId").value =
+        emp.id;
+
+    document.getElementById("employeeName").value =
+        emp.name;
+
+    document.getElementById("position").value =
+        emp.position;
+
+    document.getElementById("department").value =
+        emp.department;
+
+    document.getElementById("password").value =
+        emp.password || "";
+
+
+    editIndex = index;
+
+    saveButton.textContent =
+        "UPDATE EMPLOYEE";
+
+}
+
+
+/* DELETE */
+
+function deleteEmployee(index) {
+
+    if (!confirm("Delete this employee?")) {
+        return;
+    }
+
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+
+    employees.splice(index, 1);
+
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+
+    displayEmployees();
+
+}
+
+
+/* CLEAR */
+
+function clearForm() {
+
+    document.getElementById("employeeId").value = "";
+
+    document.getElementById("employeeName").value = "";
+
+    document.getElementById("position").value = "";
+
+    document.getElementById("department").value = "";
+
+    document.getElementById("password").value = "";
+
+}
+
+
+displayEmployees();
+
+</script>
+
+</body>
+</html>
+emp.id
+emp.id
+Windelyn
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Time In</title>
 
 <style>
@@ -46,7 +578,7 @@ header p {
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
 }
 
-.card h2 {
+h2 {
     color: #12355b;
     margin-top: 0;
 }
@@ -68,12 +600,26 @@ input {
     outline: none;
 }
 
-input:focus {
-    border-color: #12355b;
-}
-
 input[readonly] {
     background: #f1f3f5;
+}
+
+.password-box {
+    display: flex;
+    gap: 8px;
+}
+
+.password-box input {
+    flex: 1;
+}
+
+.eye-btn {
+    width: 50px !important;
+    margin-top: 0 !important;
+    padding: 10px !important;
+    background: #e9eef4 !important;
+    color: #12355b !important;
+    font-size: 18px !important;
 }
 
 button {
@@ -87,17 +633,10 @@ button {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    display: block;
-    position: relative;
-    z-index: 10;
 }
 
 button:hover {
     background: #126b32;
-}
-
-button:active {
-    transform: scale(0.99);
 }
 
 #result {
@@ -117,10 +656,6 @@ button:active {
     text-decoration: none;
     font-weight: bold;
 }
-
-.back-btn:hover {
-    text-decoration: underline;
-}
 </style>
 </head>
 
@@ -133,112 +668,163 @@ button:active {
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <h2>Employee Time In</h2>
+    <h2>Employee Time In</h2>
 
-        <label for="employeeId">Employee ID</label>
+    <label>Employee ID</label>
+
+    <input
+        type="text"
+        id="employeeId"
+        placeholder="Enter Employee ID"
+        autocomplete="off">
+
+    <label>Password</label>
+
+    <div class="password-box">
 
         <input
-            type="text"
-            id="employeeId"
-            placeholder="Enter Employee ID"
-            autocomplete="off"
-        >
+            type="password"
+            id="password"
+            placeholder="Enter Personal Password">
 
-        <label for="employeeName">Employee Name</label>
-
-        <input
-            type="text"
-            id="employeeName"
-            placeholder="Employee name"
-            readonly
-        >
-
-        <button type="button" id="timeInButton">
-            TIME IN
+        <button
+            type="button"
+            class="eye-btn"
+            onclick="togglePassword('password', this)">
+            👁
         </button>
 
-        <div id="result"></div>
-
-        <a href="dashboard.html" class="back-btn">
-            ← BACK TO DASHBOARD
-        </a>
-
     </div>
+
+    <label>Employee Name</label>
+
+    <input
+        type="text"
+        id="employeeName"
+        placeholder="Employee name"
+        readonly>
+
+    <button type="button" id="timeInButton">
+        TIME IN
+    </button>
+
+    <div id="result"></div>
+
+    <a href="dashboard.html" class="back-btn">
+        ← BACK TO DASHBOARD
+    </a>
+
+</div>
 
 </div>
 
 <script>
 
-const employeeIdInput =
+const idInput =
     document.getElementById("employeeId");
 
-const employeeNameInput =
+const passwordInput =
+    document.getElementById("password");
+
+const nameInput =
     document.getElementById("employeeName");
 
-const timeInButton =
+const button =
     document.getElementById("timeInButton");
 
 const result =
     document.getElementById("result");
 
 
-/* GET TODAY'S DATE */
+/* VIEW / HIDE PASSWORD */
+
+function togglePassword(id, button) {
+
+    const input =
+        document.getElementById(id);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.textContent = "🙈";
+
+    } else {
+
+        input.type = "password";
+        button.textContent = "👁";
+
+    }
+}
+
+
+/* TODAY */
 
 function getToday() {
 
     const now = new Date();
 
-    const year = now.getFullYear();
-
-    const month =
-        String(now.getMonth() + 1)
-        .padStart(2, "0");
-
-    const day =
-        String(now.getDate())
-        .padStart(2, "0");
-
-    return year + "-" + month + "-" + day;
+    return now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0");
 }
 
 
-/* FIND EMPLOYEE */
+/* VERIFY EMPLOYEE */
 
-function findEmployee() {
+function verifyEmployee() {
 
     const id =
-        employeeIdInput.value.trim();
+        idInput.value.trim();
 
-    employeeNameInput.value = "";
+    const password =
+        passwordInput.value;
 
-    if (id === "") {
-        return;
+    nameInput.value = "";
+
+    if (!id || !password) {
+        return null;
     }
+
 
     const employees =
         JSON.parse(
             localStorage.getItem("employees") || "[]"
         );
 
+
     const employee =
         employees.find(function(emp) {
 
-            return String(emp.id).toLowerCase() ===
-                   id.toLowerCase();
+            return (
+                String(emp.id).toLowerCase()
+                === id.toLowerCase()
+                &&
+                String(emp.password)
+                === password
+            );
 
         });
 
+
     if (employee) {
 
-        employeeNameInput.value = employee.name;
+        nameInput.value =
+            employee.name;
+
+        return employee;
 
     }
+
+
+    return null;
 }
 
 
-/* SHOW MESSAGE */
+/* MESSAGE */
 
 function showMessage(message, success) {
 
@@ -264,19 +850,14 @@ function showMessage(message, success) {
 
 function timeIn() {
 
-    const id =
-        employeeIdInput.value.trim();
-
-    const name =
-        employeeNameInput.value.trim();
+    const employee =
+        verifyEmployee();
 
 
-    /* CHECK EMPLOYEE */
-
-    if (id === "" || name === "") {
+    if (!employee) {
 
         showMessage(
-            "Please enter a valid Employee ID.",
+            "Invalid Employee ID or Password.",
             false
         );
 
@@ -284,7 +865,8 @@ function timeIn() {
     }
 
 
-    const today = getToday();
+    const today =
+        getToday();
 
 
     let records =
@@ -293,17 +875,13 @@ function timeIn() {
         );
 
 
-    /* PREVENT DUPLICATE ATTENDANCE TODAY */
-
     const alreadyRecorded =
         records.some(function(record) {
 
-            const recordId =
-                String(record.employeeId || "")
-                .toLowerCase();
-
             return (
-                recordId === id.toLowerCase() &&
+                String(record.employeeId).toLowerCase()
+                === String(employee.id).toLowerCase()
+                &&
                 record.attendanceDate === today
             );
 
@@ -313,7 +891,8 @@ function timeIn() {
     if (alreadyRecorded) {
 
         showMessage(
-            name + " already has an attendance record today.",
+            employee.name +
+            " already has an attendance record today.",
             false
         );
 
@@ -321,16 +900,14 @@ function timeIn() {
     }
 
 
-    /* CURRENT TIME */
-
     const now = new Date();
 
 
-    const newRecord = {
+    records.push({
 
-        employeeId: id,
+        employeeId: employee.id,
 
-        employeeName: name,
+        employeeName: employee.name,
 
         attendanceDate: today,
 
@@ -342,10 +919,7 @@ function timeIn() {
 
         status: "Present"
 
-    };
-
-
-    records.push(newRecord);
+    });
 
 
     localStorage.setItem(
@@ -355,33 +929,22 @@ function timeIn() {
 
 
     showMessage(
-        name +
+        employee.name +
         " successfully timed in at " +
         now.toLocaleTimeString(),
         true
     );
 
 
-    /* CLEAR FORM */
+    idInput.value = "";
 
-    employeeIdInput.value = "";
+    passwordInput.value = "";
 
-    employeeNameInput.value = "";
+    nameInput.value = "";
 
 }
 
-
-/* FIND NAME WHILE TYPING */
-
-employeeIdInput.addEventListener(
-    "input",
-    findEmployee
-);
-
-
-/* BUTTON CLICK */
-
-timeInButton.addEventListener(
+button.addEventListener(
     "click",
     timeIn
 );
