@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Employee Registration</title>
 
 <style>
+
 * {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -34,28 +36,28 @@ header p {
 }
 
 .container {
-    max-width: 900px;
-    margin: 30px auto;
+    max-width: 600px;
+    margin: 35px auto;
     padding: 0 15px;
 }
 
 .card {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 15px;
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
-    margin-bottom: 25px;
 }
 
 h2 {
     color: #12355b;
     margin-top: 0;
+    text-align: center;
 }
 
 label {
     display: block;
-    margin-top: 15px;
-    margin-bottom: 6px;
+    margin-top: 18px;
+    margin-bottom: 7px;
     font-weight: bold;
     color: #12355b;
 }
@@ -63,7 +65,7 @@ label {
 input,
 select {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 15px;
@@ -75,6 +77,8 @@ input:focus,
 select:focus {
     border-color: #12355b;
 }
+
+/* PASSWORD */
 
 .password-box {
     display: flex;
@@ -92,79 +96,52 @@ select:focus {
     background: #e9eef4 !important;
     color: #12355b !important;
     font-size: 18px !important;
+    cursor: pointer;
 }
 
-button {
+/* SAVE BUTTON */
+
+.save-btn {
     width: 100%;
-    margin-top: 20px;
-    padding: 13px;
+    margin-top: 28px;
+    padding: 14px;
     border: none;
     border-radius: 8px;
     background: #12355b;
     color: white;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
 }
 
-button:hover {
+.save-btn:hover {
     background: #0d2946;
 }
 
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    background: #12355b;
-    color: white;
-    padding: 11px;
-    text-align: left;
-}
-
-td {
-    padding: 11px;
-    border-bottom: 1px solid #ddd;
-}
-
-.action-btn {
-    width: auto;
-    margin: 2px;
-    padding: 7px 10px;
-    font-size: 12px;
-}
-
-.delete {
-    background: #d62828;
-}
-
-.delete:hover {
-    background: #b71f1f;
-}
+/* BACK BUTTON */
 
 .back-btn {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 11px 18px;
-    background: #12355b;
-    color: white;
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #12355b;
     text-decoration: none;
-    border-radius: 7px;
     font-weight: bold;
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
+
     <h1>Digital Attendance System</h1>
+
     <p>Employee Registration</p>
+
 </header>
+
 
 <div class="container">
 
@@ -172,39 +149,90 @@ td {
 
     <h2>Register Employee</h2>
 
+
+    <!-- EMPLOYEE ID -->
+
     <label>Employee ID</label>
+
     <input
         type="text"
         id="employeeId"
-        placeholder="Enter Employee ID">
+        placeholder="Enter Employee ID"
+        autocomplete="off"
+    >
+
+
+    <!-- EMPLOYEE NAME -->
 
     <label>Employee Name</label>
+
     <input
         type="text"
         id="employeeName"
-        placeholder="Enter Employee Name">
+        placeholder="Enter Employee Name"
+        autocomplete="off"
+    >
+
+
+    <!-- POSITION -->
 
     <label>Position</label>
 
     <select id="position">
-        <option value="">Select Position</option>
-        <option value="Faculty">Faculty</option>
-        <option value="Staff">Staff</option>
+
+        <option value="">
+            Select Position
+        </option>
+
+        <option value="Faculty">
+            Faculty
+        </option>
+
+        <option value="Staff">
+            Staff
+        </option>
+
     </select>
 
+
+    <!-- DEPARTMENT -->
 
     <label>Department</label>
 
     <select id="department">
-        <option value="">Select Department</option>
-        <option value="BSCRIM">BSCRIM</option>
-        <option value="BSIT">BSIT</option>
-        <option value="BSHM">BSHM</option>
-        <option value="BSED">BSED</option>
-        <option value="BSBA">BSBA</option>
-        <option value="BEED">BEED</option>
+
+        <option value="">
+            Select Department
+        </option>
+
+        <option value="BSCRIM">
+            BSCRIM
+        </option>
+
+        <option value="BSIT">
+            BSIT
+        </option>
+
+        <option value="BSHM">
+            BSHM
+        </option>
+
+        <option value="BSED">
+            BSED
+        </option>
+
+        <option value="BSBA">
+            BSBA
+        </option>
+
+        <option value="BEED">
+            BEED
+        </option>
+
     </select>
 
+
+    <!-- PASSWORD -->
 
     <label>Personal Password</label>
 
@@ -213,53 +241,37 @@ td {
         <input
             type="password"
             id="password"
-            placeholder="Create Password">
+            placeholder="Create Personal Password"
+        >
 
         <button
             type="button"
             class="eye-btn"
-            onclick="togglePassword('password', this)">
+            onclick="togglePassword()"
+        >
             👁
         </button>
 
     </div>
 
 
-    <button id="saveButton">
+    <!-- SAVE -->
+
+    <button
+        type="button"
+        class="save-btn"
+        onclick="saveEmployee()"
+    >
         SAVE EMPLOYEE
     </button>
 
-</div>
 
+    <!-- BACK -->
 
-<div class="card">
-
-    <h2>Registered Employees</h2>
-
-    <div class="table-container">
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Department</th>
-                    <th>Action</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="employeeTable"></tbody>
-
-        </table>
-
-    </div>
-
-
-    <a href="dashboard.html" class="back-btn">
+    <a
+        href="dashboard.html"
+        class="back-btn"
+    >
         ← BACK TO DASHBOARD
     </a>
 
@@ -270,28 +282,26 @@ td {
 
 <script>
 
-let editIndex = -1;
+/* SHOW / HIDE PASSWORD */
 
-const saveButton =
-    document.getElementById("saveButton");
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const button =
+        document.querySelector(".eye-btn");
 
 
-/* VIEW / HIDE PASSWORD */
+    if (password.type === "password") {
 
-function togglePassword(id, button) {
-
-    const input =
-        document.getElementById(id);
-
-    if (input.type === "password") {
-
-        input.type = "text";
+        password.type = "text";
 
         button.textContent = "🙈";
 
     } else {
 
-        input.type = "password";
+        password.type = "password";
 
         button.textContent = "👁";
 
@@ -302,7 +312,7 @@ function togglePassword(id, button) {
 
 /* SAVE EMPLOYEE */
 
-saveButton.addEventListener("click", function() {
+function saveEmployee() {
 
     const id =
         document.getElementById("employeeId")
@@ -325,14 +335,14 @@ saveButton.addEventListener("click", function() {
         .value.trim();
 
 
-    /* CHECK EMPTY FIELDS */
+    /* CHECK REQUIRED FIELDS */
 
     if (
-        !id ||
-        !name ||
-        !position ||
-        !department ||
-        !password
+        id === "" ||
+        name === "" ||
+        position === "" ||
+        department === "" ||
+        password === ""
     ) {
 
         return;
@@ -340,212 +350,47 @@ saveButton.addEventListener("click", function() {
     }
 
 
+    /* GET EXISTING EMPLOYEES */
+
     let employees =
         JSON.parse(
             localStorage.getItem("employees") || "[]"
         );
 
 
-    /* ADD NEW EMPLOYEE */
+    /* CHECK DUPLICATE ID */
 
-    if (editIndex === -1) {
+    const duplicate =
+        employees.some(function(employee) {
 
-        const duplicate =
-            employees.some(function(emp) {
-
-                return String(emp.id).toLowerCase()
-                    === id.toLowerCase();
-
-            });
-
-
-        if (duplicate) {
-
-            return;
-
-        }
-
-
-        employees.push({
-
-            id: id,
-
-            name: name,
-
-            position: position,
-
-            department: department,
-
-            password: password
+            return String(employee.id).toLowerCase()
+                === id.toLowerCase();
 
         });
 
 
-        localStorage.setItem(
-            "employees",
-            JSON.stringify(employees)
-        );
-
-
-        /* DIRECTLY GO TO TIME IN */
-
-        window.location.href = "timein.html";
-
-
-    } else {
-
-
-        /* UPDATE EMPLOYEE */
-
-        employees[editIndex] = {
-
-            id: id,
-
-            name: name,
-
-            position: position,
-
-            department: department,
-
-            password: password
-
-        };
-
-
-        localStorage.setItem(
-            "employees",
-            JSON.stringify(employees)
-        );
-
-
-        editIndex = -1;
-
-        saveButton.textContent =
-            "SAVE EMPLOYEE";
-
-        clearForm();
-
-        displayEmployees();
-
-    }
-
-});
-
-
-/* DISPLAY EMPLOYEES */
-
-function displayEmployees() {
-
-    const employees =
-        JSON.parse(
-            localStorage.getItem("employees") || "[]"
-        );
-
-    const table =
-        document.getElementById("employeeTable");
-
-    table.innerHTML = "";
-
-
-    employees.forEach(function(emp, index) {
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>${emp.id}</td>
-
-            <td>${emp.name}</td>
-
-            <td>${emp.position}</td>
-
-            <td>${emp.department}</td>
-
-            <td>
-
-                <button
-                    class="action-btn"
-                    onclick="editEmployee(${index})">
-                    Edit
-                </button>
-
-                <button
-                    class="action-btn delete"
-                    onclick="deleteEmployee(${index})">
-                    Delete
-                </button>
-
-            </td>
-
-        `;
-
-
-        table.appendChild(row);
-
-    });
-
-}
-
-
-/* EDIT EMPLOYEE */
-
-function editEmployee(index) {
-
-    const employees =
-        JSON.parse(
-            localStorage.getItem("employees") || "[]"
-        );
-
-
-    const emp =
-        employees[index];
-
-
-    document.getElementById("employeeId").value =
-        emp.id;
-
-    document.getElementById("employeeName").value =
-        emp.name;
-
-    document.getElementById("position").value =
-        emp.position;
-
-    document.getElementById("department").value =
-        emp.department;
-
-    document.getElementById("password").value =
-        emp.password || "";
-
-
-    editIndex = index;
-
-
-    saveButton.textContent =
-        "UPDATE EMPLOYEE";
-
-}
-
-
-/* DELETE EMPLOYEE */
-
-function deleteEmployee(index) {
-
-    if (!confirm("Delete this employee?")) {
+    if (duplicate) {
 
         return;
 
     }
 
 
-    const employees =
-        JSON.parse(
-            localStorage.getItem("employees") || "[]"
-        );
+    /* SAVE EMPLOYEE */
 
+    employees.push({
 
-    employees.splice(index, 1);
+        id: id,
+
+        name: name,
+
+        position: position,
+
+        department: department,
+
+        password: password
+
+    });
 
 
     localStorage.setItem(
@@ -554,31 +399,11 @@ function deleteEmployee(index) {
     );
 
 
-    displayEmployees();
+    /* DIRECTLY GO TO TIME IN */
+
+    window.location.href = "timein.html";
 
 }
-
-
-/* CLEAR FORM */
-
-function clearForm() {
-
-    document.getElementById("employeeId").value = "";
-
-    document.getElementById("employeeName").value = "";
-
-    document.getElementById("position").value = "";
-
-    document.getElementById("department").value = "";
-
-    document.getElementById("password").value = "";
-
-}
-
-
-/* LOAD EMPLOYEES */
-
-displayEmployees();
 
 </script>
 
