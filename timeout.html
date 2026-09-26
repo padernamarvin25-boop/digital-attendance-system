@@ -1,74 +1,299 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Time Out</title>
+    <title>Employee Time Out</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1e3a8a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #1e3a8a;
+            margin-top: 0;
+        }
+
+        .label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        #employeeName {
+            background: #f3f4f6;
+        }
+
+        .time-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .time-button:hover {
+            background: #b91c1c;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fef2f2;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 13px;
+            background: #374151;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 20px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Employee Time Out</h1>
+<div class="header">
+    <h1>Digital Attendance System</h1>
+    <p>Faculty and Staff Time Out</p>
+</div>
 
-<p>Employee ID</p>
-<input type="text" id="employeeId">
 
-<p>Employee Name</p>
-<input type="text" id="employeeName">
+<div class="container">
 
-<br><br>
+    <div class="card">
 
-<button onclick="timeOut()">TIME OUT</button>
+        <h2>Employee Time Out</h2>
 
-<p id="result"></p>
+        <label class="label">
+            Employee ID
+        </label>
 
-<br>
+        <input
+            type="text"
+            id="employeeId"
+            placeholder="Enter Employee ID"
+            oninput="findEmployee()">
 
-<a href="dashboard.html">BACK TO DASHBOARD</a>
+
+        <label class="label">
+            Employee Name
+        </label>
+
+        <input
+            type="text"
+            id="employeeName"
+            placeholder="Employee Name"
+            readonly>
+
+
+        <button
+            class="time-button"
+            onclick="timeOut()">
+
+            TIME OUT
+
+        </button>
+
+
+        <div
+            class="result"
+            id="result"
+            style="display:none;">
+        </div>
+
+
+        <a
+            href="dashboard.html"
+            class="back-button">
+
+            BACK TO DASHBOARD
+
+        </a>
+
+    </div>
+
+</div>
+
 
 <script>
 
+
+/* AUTOMATICALLY FIND EMPLOYEE */
+
+function findEmployee() {
+
+    let id =
+        document.getElementById("employeeId").value.trim();
+
+
+    let name =
+        document.getElementById("employeeName");
+
+
+    let employees =
+        JSON.parse(localStorage.getItem("employees")) || [];
+
+
+    let employee =
+        employees.find(function(item) {
+
+            return item.id.toLowerCase() ===
+                   id.toLowerCase();
+
+        });
+
+
+    if (employee) {
+
+        name.value = employee.name;
+
+    } else {
+
+        name.value = "";
+
+    }
+
+}
+
+
+/* TIME OUT */
+
 function timeOut() {
 
-    let id = document.getElementById("employeeId").value;
-    let name = document.getElementById("employeeName").value;
+    let id =
+        document.getElementById("employeeId").value.trim();
+
+
+    let name =
+        document.getElementById("employeeName").value.trim();
+
 
     if (id === "" || name === "") {
-        alert("Please enter Employee ID and Employee Name.");
+
         return;
+
     }
 
-    let records = JSON.parse(
-        localStorage.getItem("attendanceRecords")
-    ) || [];
 
-    let record = records.find(function(item) {
-        return item.employeeId === id &&
-               item.employeeName === name &&
-               item.timeOut === "";
-    });
+    let records =
+        JSON.parse(
+            localStorage.getItem("attendanceRecords")
+        ) || [];
+
+
+    let record =
+        records.find(function(item) {
+
+            return item.employeeId === id &&
+                   item.timeOut === "";
+
+        });
+
 
     if (!record) {
-        alert("No active Time In record found for this employee.");
+
         return;
+
     }
+
 
     let now = new Date();
 
-    record.timeOut = now.toLocaleTimeString();
+
+    record.timeOut =
+        now.toLocaleTimeString();
+
+
     record.status = "Present";
+
 
     localStorage.setItem(
         "attendanceRecords",
         JSON.stringify(records)
     );
 
+
+    document.getElementById("result").style.display =
+        "block";
+
+
     document.getElementById("result").innerHTML =
-        "TIME OUT SUCCESSFUL!<br>" +
-        name + "<br>" +
-        record.timeOut;
+        "TIME OUT: " + record.timeOut;
+
 
     document.getElementById("employeeId").value = "";
+
     document.getElementById("employeeName").value = "";
+
 }
+
 
 </script>
 
