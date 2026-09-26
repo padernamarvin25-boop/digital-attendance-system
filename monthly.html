@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Attendance Record</title>
+</head>
+
+<body>
+
+<h1>Monthly Attendance Record</h1>
+
+<label>Select Month:</label>
+<br><br>
+
+<input type="month" id="month">
+
+<button onclick="showMonthlyRecord()">
+    VIEW MONTHLY RECORD
+</button>
+
+<br><br>
+
+<table border="1" width="100%" cellpadding="10">
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Date</th>
+            <th>Time In</th>
+            <th>Time Out</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody id="monthlyTable"></tbody>
+</table>
+
+<br>
+
+<a href="dashboard.html">BACK TO DASHBOARD</a>
+
+<script>
+
+function showMonthlyRecord() {
+
+    let selectedMonth =
+        document.getElementById("month").value;
+
+    if (selectedMonth === "") {
+        alert("Please select a month.");
+        return;
+    }
+
+    let records = JSON.parse(
+        localStorage.getItem("attendanceRecords")
+    ) || [];
+
+    let table =
+        document.getElementById("monthlyTable");
+
+    table.innerHTML = "";
+
+    let found = false;
+
+    records.forEach(function(record) {
+
+        let dateParts = record.date.split("/");
+
+        if (dateParts.length === 3) {
+
+            let month = dateParts[0].padStart(2, "0");
+            let day = dateParts[1].padStart(2, "0");
+            let year = dateParts[2];
+
+            let recordMonth =
+                year + "-" + month;
+
+            if (recordMonth === selectedMonth) {
+
+                found = true;
+
+                let row = table.insertRow();
+
+                row.insertCell(0).innerHTML =
+                    record.employeeId;
+
+                row.insertCell(1).innerHTML =
+                    record.employeeName;
+
+                row.insertCell(2).innerHTML =
+                    record.date;
+
+                row.insertCell(3).innerHTML =
+                    record.timeIn;
+
+                row.insertCell(4).innerHTML =
+                    record.timeOut || "Not yet";
+
+                row.insertCell(5).innerHTML =
+                    record.status;
+            }
+        }
+
+    });
+
+    if (!found) {
+
+        let row = table.insertRow();
+
+        let cell = row.insertCell(0);
+
+        cell.colSpan = 6;
+
+        cell.innerHTML =
+            "No attendance records for this month.";
+    }
+}
+
+</script>
+
+</body>
+</html>
