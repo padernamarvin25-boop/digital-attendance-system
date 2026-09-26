@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Attendance Record</title>
 
 <style>
@@ -82,7 +83,7 @@ h2 {
     color: #0b1f3a;
 }
 
-/* TABLE VIEW */
+/* TABLE */
 
 #tableView {
     display: none;
@@ -163,72 +164,93 @@ tr:hover {
     <h1>Attendance Record</h1>
 </header>
 
+
 <div class="container">
 
-    <!-- DEPARTMENT FOLDERS -->
+    <!-- =========================
+         DEPARTMENT FOLDERS
+    ========================== -->
+
     <div class="card" id="departmentView">
 
         <h2>Select Department</h2>
 
         <div class="folder-container">
 
-            <div class="folder" onclick="openDepartment('BSCRIM')">
+            <div class="folder"
+                 onclick="openDepartment('BSCRIM')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSCRIM</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSIT')">
+            <div class="folder"
+                 onclick="openDepartment('BSIT')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSIT</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSHM')">
+            <div class="folder"
+                 onclick="openDepartment('BSHM')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSHM</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSED')">
+            <div class="folder"
+                 onclick="openDepartment('BSED')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSED</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BSBA')">
+            <div class="folder"
+                 onclick="openDepartment('BSBA')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BSBA</div>
             </div>
 
-            <div class="folder" onclick="openDepartment('BEED')">
+            <div class="folder"
+                 onclick="openDepartment('BEED')">
                 <div class="folder-icon">📁</div>
                 <div class="folder-name">BEED</div>
             </div>
 
         </div>
 
+
         <button class="back-btn dashboard-btn"
                 onclick="goDashboard()">
+
             ← Back to Dashboard
+
         </button>
 
     </div>
 
 
-    <!-- DEPARTMENT TABLE -->
+    <!-- =========================
+         ATTENDANCE TABLE
+    ========================== -->
+
     <div class="card" id="tableView">
 
         <button class="back-btn"
                 onclick="backToDepartments()">
+
             ← Back to Departments
+
         </button>
+
 
         <h2 id="departmentTitle">
             Department Attendance
         </h2>
+
 
         <div class="table-wrapper">
 
             <table>
 
                 <thead>
+
                     <tr>
                         <th>Employee ID</th>
                         <th>Employee Name</th>
@@ -237,9 +259,12 @@ tr:hover {
                         <th>Time Out</th>
                         <th>Status</th>
                     </tr>
+
                 </thead>
 
+
                 <tbody id="attendanceTable">
+
                 </tbody>
 
             </table>
@@ -253,90 +278,188 @@ tr:hover {
 
 <script>
 
+/* =================================
+   OPEN DEPARTMENT
+================================= */
+
 function openDepartment(department) {
 
-    // Hide all department folders
-    document.getElementById("departmentView").style.display = "none";
+    document.getElementById("departmentView")
+        .style.display = "none";
 
-    // Show selected department table
-    document.getElementById("tableView").style.display = "block";
+    document.getElementById("tableView")
+        .style.display = "block";
 
-    // Change title
-    document.getElementById("departmentTitle").textContent =
+
+    document.getElementById("departmentTitle")
+        .textContent =
         department + " Attendance Record";
+
 
     loadDepartmentRecords(department);
 }
 
 
+/* =================================
+   LOAD ATTENDANCE RECORDS
+================================= */
+
 function loadDepartmentRecords(department) {
 
     const employees =
-        JSON.parse(localStorage.getItem("employees") || "[]");
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
 
     const records =
-        JSON.parse(localStorage.getItem("attendanceRecords") || "[]");
+        JSON.parse(
+            localStorage.getItem("attendanceRecords") || "[]"
+        );
+
 
     const table =
         document.getElementById("attendanceTable");
 
+
     table.innerHTML = "";
 
 
-    // Get only employees from selected department
-    const departmentEmployees = employees.filter(employee =>
-        employee.department === department
-    );
+    /*
+       Find records by Employee ID.
 
+       The employee's department comes
+       from the employees list.
+    */
 
-    // Get attendance records belonging to that department
     const departmentRecords = records.filter(record => {
 
-        return departmentEmployees.some(employee =>
-            String(employee.id) === String(record.employeeId)
-        );
+        const employee =
+            employees.find(emp =>
+                String(emp.id).trim() ===
+                String(record.employeeId).trim()
+            );
+
+
+        return employee &&
+               String(employee.department).trim()
+               .toUpperCase() ===
+               String(department).trim().toUpperCase();
 
     });
 
 
-    // Sort by employee name
-    departmentRecords.sort((a, b) =>
-        String(a.employeeName).localeCompare(
-            String(b.employeeName)
-        )
-    );
+    /*
+       Sort records by employee name.
+    */
 
+    departmentRecords.sort((a, b) => {
+
+        const employeeA =
+            employees.find(emp =>
+                String(emp.id).trim() ===
+                String(a.employeeId).trim()
+            );
+
+        const employeeB =
+            employees.find(emp =>
+                String(emp.id).trim() ===
+                String(b.employeeId).trim()
+            );
+
+
+        return String(employeeA?.name || a.employeeName || "")
+            .localeCompare(
+                String(employeeB?.name || b.employeeName || "")
+            );
+
+    });
+
+
+    /*
+       If there are no records.
+    */
 
     if (departmentRecords.length === 0) {
 
         table.innerHTML = `
+
             <tr>
-                <td colspan="6" class="no-record">
-                    No attendance records found for ${department}.
+
+                <td colspan="6"
+                    class="no-record">
+
+                    No attendance records found
+                    for ${department}.
+
                 </td>
+
             </tr>
+
         `;
 
         return;
     }
 
 
+    /*
+       Display every attendance record.
+    */
+
     departmentRecords.forEach(record => {
 
-        const row = document.createElement("tr");
+        /*
+           Find the registered employee
+           using Employee ID.
+        */
+
+        const employee =
+            employees.find(emp =>
+                String(emp.id).trim() ===
+                String(record.employeeId).trim()
+            );
+
+
+        /*
+           IMPORTANT:
+           Get the name from the employee
+           registration first.
+        */
+
+        const employeeName =
+            employee
+            ? employee.name
+            : record.employeeName;
+
+
+        const row =
+            document.createElement("tr");
+
+
+        const status =
+            record.status || "Present";
+
 
         const statusClass =
-            record.status === "Present"
+            status.toLowerCase() === "present"
             ? "present"
             : "absent";
 
-        row.innerHTML = `
-            <td>${record.employeeId}</td>
 
-            <td>${record.employeeName}</td>
+        row.innerHTML = `
 
             <td>
-                ${record.date || record.attendanceDate || "-"}
+                ${record.employeeId || "-"}
+            </td>
+
+            <td>
+                ${employeeName || "-"}
+            </td>
+
+            <td>
+                ${record.date ||
+                 record.attendanceDate ||
+                 "-"}
             </td>
 
             <td>
@@ -348,30 +471,72 @@ function loadDepartmentRecords(department) {
             </td>
 
             <td class="${statusClass}">
-                ${record.status || "-"}
+                ${status}
             </td>
+
         `;
+
 
         table.appendChild(row);
 
     });
+
 }
 
+
+/* =================================
+   BACK TO DEPARTMENTS
+================================= */
 
 function backToDepartments() {
 
-    // Show department folders
-    document.getElementById("departmentView").style.display = "block";
+    document.getElementById("tableView")
+        .style.display = "none";
 
-    // Hide table
-    document.getElementById("tableView").style.display = "none";
+    document.getElementById("departmentView")
+        .style.display = "block";
 
 }
 
+
+/* =================================
+   BACK TO DASHBOARD
+================================= */
 
 function goDashboard() {
-    window.location.href = "dashboard.html";
+
+    window.location.href =
+        "dashboard.html";
+
 }
+
+
+/* =================================
+   AUTO REFRESH WHEN PAGE RETURNS
+================================= */
+
+window.addEventListener("focus", function() {
+
+    const title =
+        document.getElementById("departmentTitle")
+            .textContent;
+
+    if (
+        title &&
+        title !== "Department Attendance"
+    ) {
+
+        const department =
+            title.replace(
+                " Attendance Record",
+                ""
+            );
+
+        loadDepartmentRecords(department);
+
+    }
+
+});
 
 </script>
 
