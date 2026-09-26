@@ -1,108 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Registration</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 11px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background: #eee;
-        }
-
-        .back {
-            background: #555;
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>Employee Registration</h1>
 
-    <h1>Employee Registration</h1>
+<p>Employee ID</p>
+<input type="text" id="employeeId">
 
-    <input type="text" id="employeeId" placeholder="Employee ID">
+<p>Employee Name</p>
+<input type="text" id="employeeName">
 
-    <input type="text" id="employeeName" placeholder="Employee Name">
+<p>Position</p>
+<input type="text" id="position">
 
-    <input type="text" id="position" placeholder="Position">
+<p>Department</p>
+<input type="text" id="department">
 
-    <input type="text" id="department" placeholder="Department">
+<br><br>
 
-    <button onclick="addEmployee()">Save Employee</button>
+<button onclick="saveEmployee()">SAVE EMPLOYEE</button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Department</th>
-            </tr>
-        </thead>
+<br><br>
 
-        <tbody id="employeeTable"></tbody>
-    </table>
+<h2>Registered Employees</h2>
 
-    <button class="back" onclick="goBack()">Back to Dashboard</button>
+<table border="1" width="100%" cellpadding="10">
 
-</div>
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Position</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+
+    <tbody id="employeeTable">
+    </tbody>
+
+</table>
+
+<br>
+
+<a href="dashboard.html">BACK TO DASHBOARD</a>
 
 <script>
-
-let employees =
-    JSON.parse(localStorage.getItem("employees")) || [];
 
 function saveEmployee() {
 
@@ -115,6 +61,9 @@ function saveEmployee() {
         alert("Please complete all fields.");
         return;
     }
+
+    let employees =
+        JSON.parse(localStorage.getItem("employees")) || [];
 
     let existing = employees.find(function(employee) {
         return employee.id === id;
@@ -147,12 +96,14 @@ function saveEmployee() {
     displayEmployees();
 }
 
+
 function displayEmployees() {
+
+    let employees =
+        JSON.parse(localStorage.getItem("employees")) || [];
 
     let table =
         document.getElementById("employeeTable");
-
-    if (!table) return;
 
     table.innerHTML = "";
 
@@ -168,10 +119,10 @@ function displayEmployees() {
     });
 }
 
+
 displayEmployees();
 
 </script>
-
 
 </body>
 </html>
