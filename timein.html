@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Time In</title>
 
 <style>
-
 * {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -80,8 +77,6 @@ input[readonly] {
     background: #f1f3f5;
 }
 
-/* PASSWORD */
-
 .password-box {
     display: flex;
     gap: 8px;
@@ -101,8 +96,6 @@ input[readonly] {
     cursor: pointer;
 }
 
-/* TIME IN BUTTON */
-
 .timein-btn {
     width: 100%;
     margin-top: 25px;
@@ -120,8 +113,6 @@ input[readonly] {
     background: #126b32;
 }
 
-/* MESSAGE */
-
 #result {
     display: none;
     margin-top: 20px;
@@ -131,8 +122,6 @@ input[readonly] {
     font-weight: bold;
 }
 
-/* BACK */
-
 .back-btn {
     display: block;
     text-align: center;
@@ -141,31 +130,21 @@ input[readonly] {
     text-decoration: none;
     font-weight: bold;
 }
-
 </style>
-
 </head>
 
 <body>
 
-
 <header>
-
     <h1>Digital Attendance System</h1>
-
     <p>Faculty and Staff Time In</p>
-
 </header>
-
 
 <div class="container">
 
 <div class="card">
 
     <h2>Employee Time In</h2>
-
-
-    <!-- EMPLOYEE ID -->
 
     <label>Employee ID</label>
 
@@ -176,8 +155,14 @@ input[readonly] {
         autocomplete="off"
     >
 
+    <label>Employee Name</label>
 
-    <!-- PASSWORD -->
+    <input
+        type="text"
+        id="employeeName"
+        placeholder="Employee name will appear here"
+        readonly
+    >
 
     <label>Password</label>
 
@@ -200,21 +185,6 @@ input[readonly] {
 
     </div>
 
-
-    <!-- EMPLOYEE NAME -->
-
-    <label>Employee Name</label>
-
-    <input
-        type="text"
-        id="employeeName"
-        placeholder="Employee name will appear here"
-        readonly
-    >
-
-
-    <!-- TIME IN -->
-
     <button
         type="button"
         class="timein-btn"
@@ -223,18 +193,9 @@ input[readonly] {
         TIME IN
     </button>
 
-
-    <!-- RESULT -->
-
     <div id="result"></div>
 
-
-    <!-- BACK -->
-
-    <a
-        href="dashboard.html"
-        class="back-btn"
-    >
+    <a href="dashboard.html" class="back-btn">
         ← BACK TO DASHBOARD
     </a>
 
@@ -242,22 +203,57 @@ input[readonly] {
 
 </div>
 
-
 <script>
-
-/* ELEMENTS */
 
 const employeeId =
     document.getElementById("employeeId");
 
-const password =
-    document.getElementById("password");
-
 const employeeName =
     document.getElementById("employeeName");
 
+const password =
+    document.getElementById("password");
+
 const result =
     document.getElementById("result");
+
+
+/* AUTOMATICALLY SHOW EMPLOYEE NAME */
+
+employeeId.addEventListener("input", function() {
+
+    const id = employeeId.value.trim();
+
+    employeeName.value = "";
+
+    if (id === "") {
+        return;
+    }
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+    const employee =
+        employees.find(function(emp) {
+
+            return String(emp.id).trim().toLowerCase()
+                === id.toLowerCase();
+
+        });
+
+    if (employee) {
+
+        employeeName.value = employee.name;
+
+    } else {
+
+        employeeName.value = "Employee not found";
+
+    }
+
+});
 
 
 /* SHOW / HIDE PASSWORD */
@@ -267,17 +263,14 @@ function togglePassword() {
     const eye =
         document.querySelector(".eye-btn");
 
-
     if (password.type === "password") {
 
         password.type = "text";
-
         eye.textContent = "🙈";
 
     } else {
 
         password.type = "password";
-
         eye.textContent = "👁";
 
     }
@@ -302,63 +295,29 @@ function getToday() {
 }
 
 
-/* FIND EMPLOYEE */
+/* FIND EMPLOYEE USING ID */
 
-function verifyEmployee() {
+function findEmployee() {
 
     const id =
         employeeId.value.trim();
-
-    const pass =
-        password.value;
-
-
-    employeeName.value = "";
-
-
-    if (id === "" || pass === "") {
-
-        return null;
-
-    }
-
 
     const employees =
         JSON.parse(
             localStorage.getItem("employees") || "[]"
         );
 
+    return employees.find(function(emp) {
 
-    const employee =
-        employees.find(function(emp) {
+        return String(emp.id).trim().toLowerCase()
+            === id.toLowerCase();
 
-            return (
-                String(emp.id).toLowerCase()
-                === id.toLowerCase()
-                &&
-                String(emp.password)
-                === pass
-            );
-
-        });
-
-
-    if (employee) {
-
-        employeeName.value =
-            employee.name;
-
-        return employee;
-
-    }
-
-
-    return null;
+    });
 
 }
 
 
-/* SHOW MESSAGE */
+/* MESSAGE */
 
 function showMessage(message, success) {
 
@@ -366,17 +325,14 @@ function showMessage(message, success) {
 
     result.textContent = message;
 
-
     if (success) {
 
         result.style.background = "#e8f7ed";
-
         result.style.color = "#16803c";
 
     } else {
 
         result.style.background = "#fdeaea";
-
         result.style.color = "#d62828";
 
     }
@@ -388,29 +344,46 @@ function showMessage(message, success) {
 
 function timeIn() {
 
-    const employee =
-        verifyEmployee();
+    const employee = findEmployee();
 
+    const pass = password.value;
 
-    /* INVALID ID / PASSWORD */
 
     if (!employee) {
 
         showMessage(
-            "Invalid Employee ID or Password.",
+            "Employee ID not found.",
             false
         );
 
         return;
-
     }
 
 
-    const today =
-        getToday();
+    if (pass === "") {
+
+        showMessage(
+            "Please enter your password.",
+            false
+        );
+
+        return;
+    }
 
 
-    /* GET ATTENDANCE RECORDS */
+    if (String(employee.password) !== pass) {
+
+        showMessage(
+            "Incorrect password.",
+            false
+        );
+
+        return;
+    }
+
+
+    const today = getToday();
+
 
     let records =
         JSON.parse(
@@ -418,14 +391,12 @@ function timeIn() {
         );
 
 
-    /* CHECK IF ALREADY TIMED IN TODAY */
-
     const alreadyRecorded =
         records.some(function(record) {
 
             return (
-                String(record.employeeId).toLowerCase()
-                === String(employee.id).toLowerCase()
+                String(record.employeeId).trim().toLowerCase()
+                === String(employee.id).trim().toLowerCase()
                 &&
                 record.attendanceDate === today
             );
@@ -442,17 +413,11 @@ function timeIn() {
         );
 
         return;
-
     }
 
 
-    /* CURRENT TIME */
+    const now = new Date();
 
-    const now =
-        new Date();
-
-
-    /* CREATE RECORD */
 
     records.push({
 
@@ -473,15 +438,11 @@ function timeIn() {
     });
 
 
-    /* SAVE RECORD */
-
     localStorage.setItem(
         "attendanceRecords",
         JSON.stringify(records)
     );
 
-
-    /* SUCCESS */
 
     showMessage(
         employee.name +
@@ -491,12 +452,8 @@ function timeIn() {
     );
 
 
-    /* CLEAR INPUTS */
-
     employeeId.value = "";
-
     password.value = "";
-
     employeeName.value = "";
 
 }
