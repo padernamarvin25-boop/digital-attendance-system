@@ -1,129 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Employee Time In</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time In</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-        body {
-            margin: 0;
-            background: #f4f7fb;
-            color: #1f2937;
-        }
+body {
+    margin: 0;
+    background: #f3f6fa;
+}
 
-        .header {
-            background: #1e3a8a;
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+header {
+    background: #12355b;
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
 
-        .header h1 {
-            margin: 0 0 8px;
-        }
+header h1 {
+    margin: 0;
+    font-size: 27px;
+}
 
-        .container {
-            max-width: 700px;
-            margin: 35px auto;
-            padding: 0 20px;
-        }
+header p {
+    margin: 7px 0 0;
+    font-size: 14px;
+}
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
+.container {
+    max-width: 600px;
+    margin: 35px auto;
+    padding: 0 15px;
+}
 
-        h2 {
-            color: #1e3a8a;
-            margin-top: 0;
-        }
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+}
 
-        .label {
-            display: block;
-            margin-top: 18px;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
+.card h2 {
+    color: #12355b;
+    margin-top: 0;
+}
 
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 7px;
+    font-weight: bold;
+    color: #12355b;
+}
 
-        input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
 
-        #employeeName {
-            background: #f3f4f6;
-        }
+input:focus {
+    border-color: #12355b;
+}
 
-        .time-button {
-            width: 100%;
-            padding: 15px;
-            margin-top: 25px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+input[readonly] {
+    background: #f1f3f5;
+}
 
-        .time-button:hover {
-            background: #1d4ed8;
-        }
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #16803c;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    z-index: 10;
+}
 
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background: #eff6ff;
-            text-align: center;
-            font-weight: bold;
-        }
+button:hover {
+    background: #126b32;
+}
 
-        .back-button {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            padding: 13px;
-            background: #374151;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
+button:active {
+    transform: scale(0.99);
+}
 
-        @media (max-width: 600px) {
-            .container {
-                margin-top: 20px;
-            }
+#result {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+}
 
-            .card {
-                padding: 22px;
-            }
-        }
-    </style>
+.back-btn {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #12355b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 
 <body>
 
-<div class="header">
+<header>
     <h1>Digital Attendance System</h1>
     <p>Faculty and Staff Time In</p>
-</div>
-
+</header>
 
 <div class="container">
 
@@ -131,95 +137,126 @@
 
         <h2>Employee Time In</h2>
 
-        <label class="label">
-            Employee ID
-        </label>
+        <label for="employeeId">Employee ID</label>
 
         <input
             type="text"
             id="employeeId"
             placeholder="Enter Employee ID"
-            oninput="findEmployee()">
+            autocomplete="off"
+        >
 
-
-        <label class="label">
-            Employee Name
-        </label>
+        <label for="employeeName">Employee Name</label>
 
         <input
             type="text"
             id="employeeName"
-            placeholder="Employee Name"
-            readonly>
+            placeholder="Employee name"
+            readonly
+        >
 
-
-        <button
-            class="time-button"
-            onclick="timeIn()">
-
+        <button type="button" id="timeInButton">
             TIME IN
-
         </button>
 
+        <div id="result"></div>
 
-        <div
-            class="result"
-            id="result"
-            style="display:none;">
-        </div>
-
-
-        <a
-            href="dashboard.html"
-            class="back-button">
-
-            BACK TO DASHBOARD
-
+        <a href="dashboard.html" class="back-btn">
+            ← BACK TO DASHBOARD
         </a>
 
     </div>
 
 </div>
 
-
 <script>
 
+const employeeIdInput =
+    document.getElementById("employeeId");
 
-/* AUTOMATICALLY FIND EMPLOYEE */
+const employeeNameInput =
+    document.getElementById("employeeName");
+
+const timeInButton =
+    document.getElementById("timeInButton");
+
+const result =
+    document.getElementById("result");
+
+
+/* GET TODAY'S DATE */
+
+function getToday() {
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1)
+        .padStart(2, "0");
+
+    const day =
+        String(now.getDate())
+        .padStart(2, "0");
+
+    return year + "-" + month + "-" + day;
+}
+
+
+/* FIND EMPLOYEE */
 
 function findEmployee() {
 
-    let id =
-        document.getElementById("employeeId").value.trim();
+    const id =
+        employeeIdInput.value.trim();
 
+    employeeNameInput.value = "";
 
-    let name =
-        document.getElementById("employeeName");
+    if (id === "") {
+        return;
+    }
 
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    const employee =
+        employees.find(function(emp) {
 
-
-    let employee =
-        employees.find(function(item) {
-
-            return item.id.toLowerCase() ===
+            return String(emp.id).toLowerCase() ===
                    id.toLowerCase();
 
         });
 
-
     if (employee) {
 
-        name.value = employee.name;
+        employeeNameInput.value = employee.name;
+
+    }
+}
+
+
+/* SHOW MESSAGE */
+
+function showMessage(message, success) {
+
+    result.style.display = "block";
+
+    result.textContent = message;
+
+    if (success) {
+
+        result.style.background = "#e8f7ed";
+        result.style.color = "#16803c";
 
     } else {
 
-        name.value = "";
+        result.style.background = "#fdeaea";
+        result.style.color = "#d62828";
 
     }
-
 }
 
 
@@ -227,51 +264,75 @@ function findEmployee() {
 
 function timeIn() {
 
-    let id =
-        document.getElementById("employeeId").value.trim();
+    const id =
+        employeeIdInput.value.trim();
+
+    const name =
+        employeeNameInput.value.trim();
 
 
-    let name =
-        document.getElementById("employeeName").value.trim();
-
+    /* CHECK EMPLOYEE */
 
     if (id === "" || name === "") {
 
-        return;
+        showMessage(
+            "Please enter a valid Employee ID.",
+            false
+        );
 
+        return;
     }
+
+
+    const today = getToday();
 
 
     let records =
         JSON.parse(
-            localStorage.getItem("attendanceRecords")
-        ) || [];
+            localStorage.getItem("attendanceRecords") || "[]"
+        );
 
 
-    let alreadyTimedIn =
-        records.find(function(record) {
+    /* PREVENT DUPLICATE ATTENDANCE TODAY */
 
-            return record.employeeId === id &&
-                   record.timeOut === "";
+    const alreadyRecorded =
+        records.some(function(record) {
+
+            const recordId =
+                String(record.employeeId || "")
+                .toLowerCase();
+
+            return (
+                recordId === id.toLowerCase() &&
+                record.attendanceDate === today
+            );
 
         });
 
 
-    if (alreadyTimedIn) {
+    if (alreadyRecorded) {
+
+        showMessage(
+            name + " already has an attendance record today.",
+            false
+        );
 
         return;
-
     }
 
 
-    let now = new Date();
+    /* CURRENT TIME */
+
+    const now = new Date();
 
 
-    let record = {
+    const newRecord = {
 
         employeeId: id,
 
         employeeName: name,
+
+        attendanceDate: today,
 
         date: now.toLocaleDateString(),
 
@@ -284,7 +345,7 @@ function timeIn() {
     };
 
 
-    records.push(record);
+    records.push(newRecord);
 
 
     localStorage.setItem(
@@ -293,22 +354,41 @@ function timeIn() {
     );
 
 
-    document.getElementById("result").style.display =
-        "block";
+    showMessage(
+        name +
+        " successfully timed in at " +
+        now.toLocaleTimeString(),
+        true
+    );
 
 
-    document.getElementById("result").innerHTML =
-        "TIME IN: " + record.timeIn;
+    /* CLEAR FORM */
 
+    employeeIdInput.value = "";
 
-    document.getElementById("employeeId").value = "";
-
-    document.getElementById("employeeName").value = "";
+    employeeNameInput.value = "";
 
 }
 
+
+/* FIND NAME WHILE TYPING */
+
+employeeIdInput.addEventListener(
+    "input",
+    findEmployee
+);
+
+
+/* BUTTON CLICK */
+
+timeInButton.addEventListener(
+    "click",
+    timeIn
+);
 
 </script>
 
 </body>
 </html>
+emp.id
+emp.id
