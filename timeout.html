@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Time Out</title>
 
 <style>
@@ -47,7 +46,7 @@ header p {
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
 }
 
-.card h2 {
+h2 {
     color: #12355b;
     margin-top: 0;
 }
@@ -69,12 +68,26 @@ input {
     outline: none;
 }
 
-input:focus {
-    border-color: #12355b;
-}
-
 input[readonly] {
     background: #f1f3f5;
+}
+
+.password-box {
+    display: flex;
+    gap: 8px;
+}
+
+.password-box input {
+    flex: 1;
+}
+
+.eye-btn {
+    width: 50px !important;
+    margin-top: 0 !important;
+    padding: 10px !important;
+    background: #e9eef4 !important;
+    color: #12355b !important;
+    font-size: 18px !important;
 }
 
 button {
@@ -88,17 +101,10 @@ button {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    display: block;
-    position: relative;
-    z-index: 10;
 }
 
 button:hover {
     background: #b71f1f;
-}
-
-button:active {
-    transform: scale(0.99);
 }
 
 #result {
@@ -118,10 +124,6 @@ button:active {
     text-decoration: none;
     font-weight: bold;
 }
-
-.back-btn:hover {
-    text-decoration: underline;
-}
 </style>
 </head>
 
@@ -134,118 +136,163 @@ button:active {
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <h2>Employee Time Out</h2>
+    <h2>Employee Time Out</h2>
 
-        <label for="employeeId">
-            Employee ID
-        </label>
+    <label>Employee ID</label>
 
-        <input
-            type="text"
-            id="employeeId"
-            placeholder="Enter Employee ID"
-            autocomplete="off"
-        >
+    <input
+        type="text"
+        id="employeeId"
+        placeholder="Enter Employee ID"
+        autocomplete="off">
 
-        <label for="employeeName">
-            Employee Name
-        </label>
+    <label>Password</label>
+
+    <div class="password-box">
 
         <input
-            type="text"
-            id="employeeName"
-            placeholder="Employee name"
-            readonly
-        >
+            type="password"
+            id="password"
+            placeholder="Enter Personal Password">
 
-        <button type="button" id="timeOutButton">
-            TIME OUT
+        <button
+            type="button"
+            class="eye-btn"
+            onclick="togglePassword('password', this)">
+            👁
         </button>
 
-        <div id="result"></div>
-
-        <a href="dashboard.html" class="back-btn">
-            ← BACK TO DASHBOARD
-        </a>
-
     </div>
+
+    <label>Employee Name</label>
+
+    <input
+        type="text"
+        id="employeeName"
+        placeholder="Employee name"
+        readonly>
+
+    <button type="button" id="timeOutButton">
+        TIME OUT
+    </button>
+
+    <div id="result"></div>
+
+    <a href="dashboard.html" class="back-btn">
+        ← BACK TO DASHBOARD
+    </a>
+
+</div>
 
 </div>
 
 <script>
 
-const employeeIdInput =
+const idInput =
     document.getElementById("employeeId");
 
-const employeeNameInput =
+const passwordInput =
+    document.getElementById("password");
+
+const nameInput =
     document.getElementById("employeeName");
 
-const timeOutButton =
+const button =
     document.getElementById("timeOutButton");
 
 const result =
     document.getElementById("result");
 
 
-/* GET TODAY */
+/* VIEW / HIDE PASSWORD */
+
+function togglePassword(id, button) {
+
+    const input =
+        document.getElementById(id);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.textContent = "🙈";
+
+    } else {
+
+        input.type = "password";
+        button.textContent = "👁";
+
+    }
+}
+
+
+/* TODAY */
 
 function getToday() {
 
     const now = new Date();
 
-    const year =
-        now.getFullYear();
-
-    const month =
-        String(now.getMonth() + 1)
-        .padStart(2, "0");
-
-    const day =
-        String(now.getDate())
-        .padStart(2, "0");
-
-    return year + "-" + month + "-" + day;
+    return now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0");
 }
 
 
-/* FIND EMPLOYEE */
+/* VERIFY EMPLOYEE */
 
-function findEmployee() {
+function verifyEmployee() {
 
     const id =
-        employeeIdInput.value.trim();
+        idInput.value.trim();
 
-    employeeNameInput.value = "";
+    const password =
+        passwordInput.value;
 
-    if (id === "") {
-        return;
+    nameInput.value = "";
+
+    if (!id || !password) {
+        return null;
     }
+
 
     const employees =
         JSON.parse(
             localStorage.getItem("employees") || "[]"
         );
 
+
     const employee =
         employees.find(function(emp) {
 
-            return String(emp.id).toLowerCase() ===
-                   id.toLowerCase();
+            return (
+                String(emp.id).toLowerCase()
+                === id.toLowerCase()
+                &&
+                String(emp.password)
+                === password
+            );
 
         });
 
+
     if (employee) {
 
-        employeeNameInput.value =
+        nameInput.value =
             employee.name;
 
+        return employee;
+
     }
+
+
+    return null;
 }
 
 
-/* SHOW MESSAGE */
+/* MESSAGE */
 
 function showMessage(message, success) {
 
@@ -271,17 +318,14 @@ function showMessage(message, success) {
 
 function timeOut() {
 
-    const id =
-        employeeIdInput.value.trim();
-
-    const name =
-        employeeNameInput.value.trim();
+    const employee =
+        verifyEmployee();
 
 
-    if (id === "" || name === "") {
+    if (!employee) {
 
         showMessage(
-            "Please enter a valid Employee ID.",
+            "Invalid Employee ID or Password.",
             false
         );
 
@@ -289,7 +333,8 @@ function timeOut() {
     }
 
 
-    const today = getToday();
+    const today =
+        getToday();
 
 
     let records =
@@ -298,24 +343,18 @@ function timeOut() {
         );
 
 
-    /*
-       FIND TODAY'S TIME IN RECORD
-    */
-
     const recordIndex =
         records.findIndex(function(record) {
 
             return (
-                String(record.employeeId).toLowerCase() ===
-                id.toLowerCase() &&
-
+                String(record.employeeId).toLowerCase()
+                === String(employee.id).toLowerCase()
+                &&
                 record.attendanceDate === today
             );
 
         });
 
-
-    /* NO TIME IN TODAY */
 
     if (recordIndex === -1) {
 
@@ -332,12 +371,10 @@ function timeOut() {
         records[recordIndex];
 
 
-    /* PREVENT DOUBLE TIME OUT */
-
     if (record.timeOut !== "") {
 
         showMessage(
-            name +
+            employee.name +
             " already has a Time Out record today.",
             false
         );
@@ -346,9 +383,8 @@ function timeOut() {
     }
 
 
-    /* SAVE TIME OUT */
-
     const now = new Date();
+
 
     record.timeOut =
         now.toLocaleTimeString();
@@ -367,36 +403,23 @@ function timeOut() {
     );
 
 
-    /* SUCCESS MESSAGE */
-
     showMessage(
-        name +
+        employee.name +
         " successfully timed out at " +
         now.toLocaleTimeString(),
         true
     );
 
 
-    /* CLEAR INPUT */
+    idInput.value = "";
 
-    employeeIdInput.value = "";
+    passwordInput.value = "";
 
-    employeeNameInput.value = "";
+    nameInput.value = "";
 
 }
 
-
-/* FIND NAME WHILE TYPING */
-
-employeeIdInput.addEventListener(
-    "input",
-    findEmployee
-);
-
-
-/* TIME OUT BUTTON */
-
-timeOutButton.addEventListener(
+button.addEventListener(
     "click",
     timeOut
 );
