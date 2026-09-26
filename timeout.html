@@ -49,6 +49,7 @@ header p {
 h2 {
     color: #12355b;
     margin-top: 0;
+    text-align: center;
 }
 
 label {
@@ -88,9 +89,10 @@ input[readonly] {
     background: #e9eef4 !important;
     color: #12355b !important;
     font-size: 18px !important;
+    cursor: pointer;
 }
 
-button {
+.timeout-btn {
     width: 100%;
     margin-top: 25px;
     padding: 14px;
@@ -103,7 +105,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.timeout-btn:hover {
     background: #b71f1f;
 }
 
@@ -146,7 +148,17 @@ button:hover {
         type="text"
         id="employeeId"
         placeholder="Enter Employee ID"
-        autocomplete="off">
+        autocomplete="off"
+    >
+
+    <label>Employee Name</label>
+
+    <input
+        type="text"
+        id="employeeName"
+        placeholder="Employee name will appear here"
+        readonly
+    >
 
     <label>Password</label>
 
@@ -155,26 +167,25 @@ button:hover {
         <input
             type="password"
             id="password"
-            placeholder="Enter Personal Password">
+            placeholder="Enter Personal Password"
+            autocomplete="off"
+        >
 
         <button
             type="button"
             class="eye-btn"
-            onclick="togglePassword('password', this)">
+            onclick="togglePassword()"
+        >
             👁
         </button>
 
     </div>
 
-    <label>Employee Name</label>
-
-    <input
-        type="text"
-        id="employeeName"
-        placeholder="Employee name"
-        readonly>
-
-    <button type="button" id="timeOutButton">
+    <button
+        type="button"
+        class="timeout-btn"
+        onclick="timeOut()"
+    >
         TIME OUT
     </button>
 
@@ -190,105 +201,115 @@ button:hover {
 
 <script>
 
-const idInput =
+const employeeId =
     document.getElementById("employeeId");
 
-const passwordInput =
-    document.getElementById("password");
-
-const nameInput =
+const employeeName =
     document.getElementById("employeeName");
 
-const button =
-    document.getElementById("timeOutButton");
+const password =
+    document.getElementById("password");
 
 const result =
     document.getElementById("result");
 
 
-/* VIEW / HIDE PASSWORD */
+/* AUTOMATICALLY SHOW EMPLOYEE NAME */
 
-function togglePassword(id, button) {
+employeeId.addEventListener("input", function() {
 
-    const input =
-        document.getElementById(id);
+    const id = employeeId.value.trim();
 
-    if (input.type === "password") {
+    employeeName.value = "";
 
-        input.type = "text";
-        button.textContent = "🙈";
-
-    } else {
-
-        input.type = "password";
-        button.textContent = "👁";
-
+    if (id === "") {
+        return;
     }
-}
-
-
-/* TODAY */
-
-function getToday() {
-
-    const now = new Date();
-
-    return now.getFullYear() +
-        "-" +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        "-" +
-        String(now.getDate()).padStart(2, "0");
-}
-
-
-/* VERIFY EMPLOYEE */
-
-function verifyEmployee() {
-
-    const id =
-        idInput.value.trim();
-
-    const password =
-        passwordInput.value;
-
-    nameInput.value = "";
-
-    if (!id || !password) {
-        return null;
-    }
-
 
     const employees =
         JSON.parse(
             localStorage.getItem("employees") || "[]"
         );
 
-
     const employee =
         employees.find(function(emp) {
 
-            return (
-                String(emp.id).toLowerCase()
-                === id.toLowerCase()
-                &&
-                String(emp.password)
-                === password
-            );
+            return String(emp.id).trim().toLowerCase()
+                === id.toLowerCase();
 
         });
 
-
     if (employee) {
 
-        nameInput.value =
-            employee.name;
+        employeeName.value = employee.name;
 
-        return employee;
+    } else {
+
+        employeeName.value = "Employee not found";
 
     }
 
+});
 
-    return null;
+
+/* SHOW / HIDE PASSWORD */
+
+function togglePassword() {
+
+    const eye =
+        document.querySelector(".eye-btn");
+
+    if (password.type === "password") {
+
+        password.type = "text";
+        eye.textContent = "🙈";
+
+    } else {
+
+        password.type = "password";
+        eye.textContent = "👁";
+
+    }
+
+}
+
+
+/* GET TODAY */
+
+function getToday() {
+
+    const now = new Date();
+
+    return (
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0")
+    );
+
+}
+
+
+/* FIND EMPLOYEE USING ID */
+
+function findEmployee() {
+
+    const id =
+        employeeId.value.trim();
+
+    const employees =
+        JSON.parse(
+            localStorage.getItem("employees") || "[]"
+        );
+
+    return employees.find(function(emp) {
+
+        return String(emp.id).trim().toLowerCase()
+            === id.toLowerCase();
+
+    });
+
 }
 
 
@@ -311,6 +332,7 @@ function showMessage(message, success) {
         result.style.color = "#d62828";
 
     }
+
 }
 
 
@@ -318,14 +340,15 @@ function showMessage(message, success) {
 
 function timeOut() {
 
-    const employee =
-        verifyEmployee();
+    const employee = findEmployee();
+
+    const pass = password.value;
 
 
     if (!employee) {
 
         showMessage(
-            "Invalid Employee ID or Password.",
+            "Employee ID not found.",
             false
         );
 
@@ -333,8 +356,29 @@ function timeOut() {
     }
 
 
-    const today =
-        getToday();
+    if (pass === "") {
+
+        showMessage(
+            "Please enter your password.",
+            false
+        );
+
+        return;
+    }
+
+
+    if (String(employee.password) !== pass) {
+
+        showMessage(
+            "Incorrect password.",
+            false
+        );
+
+        return;
+    }
+
+
+    const today = getToday();
 
 
     let records =
@@ -347,8 +391,8 @@ function timeOut() {
         records.findIndex(function(record) {
 
             return (
-                String(record.employeeId).toLowerCase()
-                === String(employee.id).toLowerCase()
+                String(record.employeeId).trim().toLowerCase()
+                === String(employee.id).trim().toLowerCase()
                 &&
                 record.attendanceDate === today
             );
@@ -383,7 +427,8 @@ function timeOut() {
     }
 
 
-    const now = new Date();
+    const now =
+        new Date();
 
 
     record.timeOut =
@@ -411,18 +456,11 @@ function timeOut() {
     );
 
 
-    idInput.value = "";
-
-    passwordInput.value = "";
-
-    nameInput.value = "";
+    employeeId.value = "";
+    password.value = "";
+    employeeName.value = "";
 
 }
-
-button.addEventListener(
-    "click",
-    timeOut
-);
 
 </script>
 
