@@ -66,6 +66,29 @@ input {
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 15px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #12355b;
+}
+
+.password-box {
+    display: flex;
+    gap: 8px;
+}
+
+.password-box input {
+    flex: 1;
+}
+
+.eye-btn {
+    width: 48px !important;
+    margin-top: 0 !important;
+    padding: 10px !important;
+    background: #e9eef4 !important;
+    color: #12355b !important;
+    font-size: 18px !important;
 }
 
 button {
@@ -116,6 +139,10 @@ td {
     background: #d62828;
 }
 
+.delete:hover {
+    background: #b71f1f;
+}
+
 .back-btn {
     display: inline-block;
     margin-top: 10px;
@@ -143,24 +170,44 @@ td {
     <h2>Register Employee</h2>
 
     <label>Employee ID</label>
-    <input type="text" id="employeeId"
-           placeholder="Enter Employee ID">
+    <input
+        type="text"
+        id="employeeId"
+        placeholder="Enter Employee ID">
 
     <label>Employee Name</label>
-    <input type="text" id="employeeName"
-           placeholder="Enter Employee Name">
+    <input
+        type="text"
+        id="employeeName"
+        placeholder="Enter Employee Name">
 
     <label>Position</label>
-    <input type="text" id="position"
-           placeholder="Enter Position">
+    <input
+        type="text"
+        id="position"
+        placeholder="Enter Position">
 
     <label>Department</label>
-    <input type="text" id="department"
-           placeholder="Enter Department">
+    <input
+        type="text"
+        id="department"
+        placeholder="Enter Department">
 
     <label>Personal Password</label>
-    <input type="password" id="password"
-           placeholder="Create Password">
+
+    <div class="password-box">
+        <input
+            type="password"
+            id="password"
+            placeholder="Create Password">
+
+        <button
+            type="button"
+            class="eye-btn"
+            onclick="togglePassword('password', this)">
+            👁
+        </button>
+    </div>
 
     <button id="saveButton">
         SAVE EMPLOYEE
@@ -208,6 +255,29 @@ let editIndex = -1;
 const saveButton =
     document.getElementById("saveButton");
 
+
+/* SHOW / HIDE PASSWORD */
+
+function togglePassword(id, button) {
+
+    const input =
+        document.getElementById(id);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.textContent = "🙈";
+
+    } else {
+
+        input.type = "password";
+        button.textContent = "👁";
+
+    }
+}
+
+
+/* SAVE EMPLOYEE */
 
 saveButton.addEventListener("click", function() {
 
@@ -313,6 +383,8 @@ saveButton.addEventListener("click", function() {
 });
 
 
+/* DISPLAY EMPLOYEES */
+
 function displayEmployees() {
 
     const employees =
@@ -366,6 +438,8 @@ function displayEmployees() {
 }
 
 
+/* EDIT */
+
 function editEmployee(index) {
 
     const employees =
@@ -373,7 +447,8 @@ function editEmployee(index) {
             localStorage.getItem("employees") || "[]"
         );
 
-    const emp = employees[index];
+    const emp =
+        employees[index];
 
 
     document.getElementById("employeeId").value =
@@ -399,6 +474,8 @@ function editEmployee(index) {
 
 }
 
+
+/* DELETE */
 
 function deleteEmployee(index) {
 
@@ -426,6 +503,8 @@ function deleteEmployee(index) {
 
 }
 
+
+/* CLEAR */
 
 function clearForm() {
 
