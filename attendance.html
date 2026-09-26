@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Attendance</title>
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Attendance Record</title>
 
 <style>
+
 * {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -15,6 +21,8 @@ body {
     margin: 0;
     background: #f3f6fa;
 }
+
+/* HEADER */
 
 header {
     background: #12355b;
@@ -33,11 +41,15 @@ header p {
     font-size: 14px;
 }
 
+/* CONTAINER */
+
 .container {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 30px auto;
     padding: 0 15px;
 }
+
+/* CARD */
 
 .card {
     background: white;
@@ -46,89 +58,160 @@ header p {
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
 }
 
-.card h2 {
+/* TITLE */
+
+.title {
     color: #12355b;
     margin-top: 0;
 }
 
-.date-today {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 18px;
-}
+/* MONTH */
 
-/* SMALL TOTAL BOXES */
-
-.summary {
-    display: flex;
-    gap: 12px;
+.month-box {
     margin-bottom: 20px;
 }
 
-.summary-box {
-    width: 160px;
-    padding: 14px;
-    border-radius: 10px;
-    background: #eef4f9;
-    text-align: center;
-}
-
-.summary-box h3 {
-    margin: 0 0 6px;
-    font-size: 13px;
-    color: #12355b;
-}
-
-.summary-box p {
-    margin: 0;
-    font-size: 22px;
+.month-box label {
+    display: block;
     font-weight: bold;
     color: #12355b;
+    margin-bottom: 7px;
 }
 
-.table-container {
+.month-box select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* DEPARTMENT FOLDER */
+
+.department {
+    border: 1px solid #d5dce3;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.department-header {
+    background: #eef4f9;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #12355b;
+    font-weight: bold;
+}
+
+.department-header:hover {
+    background: #e2ebf3;
+}
+
+.department-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.arrow {
+    font-size: 14px;
+}
+
+/* EMPLOYEE AREA */
+
+.employee-area {
+    display: none;
+    padding: 12px;
+    background: white;
+}
+
+/* EMPLOYEE FOLDER */
+
+.employee {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.employee-header {
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+}
+
+.employee-header:hover {
+    background: #f0f4f7;
+}
+
+.employee-name {
+    color: #12355b;
+    font-weight: bold;
+}
+
+.employee-info {
+    font-size: 12px;
+    color: #666;
+}
+
+/* RECORD AREA */
+
+.record-area {
+    display: none;
+    padding: 12px;
     overflow-x: auto;
 }
+
+/* TABLE */
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    min-width: 650px;
 }
 
 th {
     background: #12355b;
     color: white;
-    padding: 12px;
+    padding: 10px;
     text-align: left;
+    font-size: 13px;
 }
 
 td {
-    padding: 12px;
+    padding: 10px;
     border-bottom: 1px solid #ddd;
+    font-size: 13px;
 }
 
-tr:hover {
-    background: #f7f9fb;
-}
-
-.status {
-    font-weight: bold;
-}
+/* STATUS */
 
 .present {
     color: #16803c;
+    font-weight: bold;
 }
 
 .absent {
     color: #d62828;
+    font-weight: bold;
 }
 
+/* NO RECORD */
+
 .no-record {
+    padding: 15px;
     text-align: center;
-    padding: 25px;
     color: #777;
+    font-size: 14px;
 }
+
+/* BACK BUTTON */
 
 .back-btn {
     display: inline-block;
@@ -141,224 +224,596 @@ tr:hover {
     font-weight: bold;
 }
 
-.back-btn:hover {
-    background: #0d2946;
-}
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
     <h1>Digital Attendance System</h1>
-    <p>Daily Attendance Record</p>
+
+    <p>Attendance Record</p>
+
 </header>
+
 
 <div class="container">
 
 <div class="card">
 
-    <h2>Today's Attendance</h2>
+    <h2 class="title">
+        Attendance Record
+    </h2>
 
-    <div class="date-today" id="todayDate"></div>
 
-    <div class="summary">
+    <!-- MONTH SELECTOR -->
 
-        <div class="summary-box">
-            <h3>TOTAL PRESENT</h3>
-            <p id="totalPresent">0</p>
-        </div>
+    <div class="month-box">
 
-        <div class="summary-box">
-            <h3>TOTAL ABSENT</h3>
-            <p id="totalAbsent">0</p>
-        </div>
+        <label>
+            Select Month
+        </label>
 
-    </div>
+        <select id="monthSelect"
+                onchange="loadAttendance()">
 
-    <div class="table-container">
-
-        <table>
-
-            <thead>
-                <tr>
-                    <th>Employee ID</th>
-                    <th>Employee Name</th>
-                    <th>Date</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody id="attendanceTable"></tbody>
-
-        </table>
+        </select>
 
     </div>
 
-    <a href="dashboard.html" class="back-btn">
+
+    <!-- DEPARTMENTS -->
+
+    <div id="departmentContainer">
+
+    </div>
+
+
+    <a href="dashboard.html"
+       class="back-btn">
+
         ← BACK TO DASHBOARD
+
     </a>
 
 </div>
 
 </div>
 
+
 <script>
 
-/* TODAY KEY */
+/* DEPARTMENTS */
 
-function getToday() {
+const departments = [
 
-    const now = new Date();
+    "BSCRIM",
+    "BSIT",
+    "BSHM",
+    "BSED",
+    "BSBA",
+    "BEED"
 
-    return (
-        now.getFullYear() +
-        "-" +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        "-" +
-        String(now.getDate()).padStart(2, "0")
+];
+
+
+/* LOAD EMPLOYEES */
+
+function getEmployees() {
+
+    return JSON.parse(
+        localStorage.getItem("employees") || "[]"
     );
-}
 
-
-/* TODAY'S DISPLAY DATE */
-
-function displayToday() {
-
-    const now = new Date();
-
-    document.getElementById("todayDate").textContent =
-        now.toLocaleDateString(undefined, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        });
 }
 
 
 /* LOAD RECORDS */
 
-function loadAttendance() {
+function getRecords() {
 
-    const records =
-        JSON.parse(
-            localStorage.getItem("attendanceRecords") || "[]"
-        );
+    return JSON.parse(
+        localStorage.getItem("attendanceRecords") || "[]"
+    );
 
-    const today = getToday();
-
-    const todayRecords = records.filter(function(record) {
-
-        return record.attendanceDate === today;
-
-    });
+}
 
 
-    /* SORT BY NAME */
+/* CREATE MONTH OPTIONS */
 
-    todayRecords.sort(function(a, b) {
+function createMonthOptions() {
 
-        return String(a.employeeName || "")
-            .localeCompare(
-                String(b.employeeName || "")
+    const select =
+        document.getElementById("monthSelect");
+
+    const now =
+        new Date();
+
+    const currentYear =
+        now.getFullYear();
+
+    const currentMonth =
+        now.getMonth();
+
+
+    select.innerHTML = "";
+
+
+    for (
+        let month = 0;
+        month <= currentMonth;
+        month++
+    ) {
+
+        const option =
+            document.createElement("option");
+
+        const value =
+            currentYear + "-" +
+            String(month + 1).padStart(2, "0");
+
+
+        option.value =
+            value;
+
+
+        option.textContent =
+            new Date(
+                currentYear,
+                month,
+                1
+            ).toLocaleString(
+                "default",
+                {
+                    month: "long",
+                    year: "numeric"
+                }
             );
 
-    });
 
-
-    const table =
-        document.getElementById("attendanceTable");
-
-    table.innerHTML = "";
-
-
-    let totalPresent = 0;
-    let totalAbsent = 0;
-
-
-    if (todayRecords.length === 0) {
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="6" class="no-record">
-                    No attendance records for today.
-                </td>
-            </tr>
-        `;
+        select.appendChild(option);
 
     }
 
 
-    todayRecords.forEach(function(record) {
+    select.value =
+        currentYear + "-" +
+        String(currentMonth + 1).padStart(2, "0");
 
-        if (record.status === "Present") {
-            totalPresent++;
-        }
-
-        if (record.status === "Absent") {
-            totalAbsent++;
-        }
+}
 
 
-        const row =
-            document.createElement("tr");
+/* LOAD ATTENDANCE */
+
+function loadAttendance() {
+
+    const container =
+        document.getElementById(
+            "departmentContainer"
+        );
 
 
-        const statusClass =
-            record.status === "Present"
-                ? "present"
-                : "absent";
+    container.innerHTML = "";
 
 
-        row.innerHTML = `
-            <td>${record.employeeId || ""}</td>
+    const employees =
+        getEmployees();
 
-            <td>${record.employeeName || ""}</td>
 
-            <td>${record.date || ""}</td>
+    const records =
+        getRecords();
 
-            <td>${record.timeIn || ""}</td>
 
-            <td>${record.timeOut || ""}</td>
+    const selectedMonth =
+        document.getElementById(
+            "monthSelect"
+        ).value;
 
-            <td class="status ${statusClass}">
-                ${record.status || ""}
-            </td>
+
+    /* CREATE DEPARTMENT FOLDERS */
+
+    departments.forEach(function(department, departmentIndex) {
+
+        const departmentBox =
+            document.createElement("div");
+
+        departmentBox.className =
+            "department";
+
+
+        const departmentHeader =
+            document.createElement("div");
+
+        departmentHeader.className =
+            "department-header";
+
+
+        departmentHeader.innerHTML = `
+
+            <div class="department-name">
+
+                <span>📁</span>
+
+                <span>${department}</span>
+
+            </div>
+
+            <span class="arrow">
+                ▶
+            </span>
+
         `;
 
 
-        table.appendChild(row);
+        const employeeArea =
+            document.createElement("div");
+
+        employeeArea.className =
+            "employee-area";
+
+
+        /* EMPLOYEES IN THIS DEPARTMENT */
+
+        const departmentEmployees =
+            employees
+            .filter(function(employee) {
+
+                return employee.department
+                    === department;
+
+            })
+            .sort(function(a, b) {
+
+                return a.name.localeCompare(
+                    b.name
+                );
+
+            });
+
+
+        if (
+            departmentEmployees.length === 0
+        ) {
+
+            employeeArea.innerHTML = `
+
+                <div class="no-record">
+                    No registered employees.
+                </div>
+
+            `;
+
+        }
+
+
+        departmentEmployees.forEach(
+            function(employee, employeeIndex) {
+
+
+            const employeeBox =
+                document.createElement("div");
+
+            employeeBox.className =
+                "employee";
+
+
+            const employeeHeader =
+                document.createElement("div");
+
+            employeeHeader.className =
+                "employee-header";
+
+
+            employeeHeader.innerHTML = `
+
+                <div>
+
+                    <div class="employee-name">
+                        👤 ${employee.name}
+                    </div>
+
+                    <div class="employee-info">
+                        ID: ${employee.id}
+                    </div>
+
+                </div>
+
+                <span class="arrow">
+                    ▶
+                </span>
+
+            `;
+
+
+            const recordArea =
+                document.createElement("div");
+
+            recordArea.className =
+                "record-area";
+
+
+            /* FIND EMPLOYEE RECORDS */
+
+            const employeeRecords =
+                records
+                .filter(function(record) {
+
+                    if (
+                        String(record.employeeId)
+                        .toLowerCase()
+                        !==
+                        String(employee.id)
+                        .toLowerCase()
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    /*
+                     USE attendanceDate
+                     WHEN AVAILABLE
+                    */
+
+                    if (
+                        record.attendanceDate
+                    ) {
+
+                        return record
+                            .attendanceDate
+                            .startsWith(
+                                selectedMonth
+                            );
+
+                    }
+
+
+                    return false;
+
+                })
+                .sort(function(a, b) {
+
+                    return String(a.date)
+                        .localeCompare(
+                            String(b.date)
+                        );
+
+                });
+
+
+            if (
+                employeeRecords.length === 0
+            ) {
+
+                recordArea.innerHTML = `
+
+                    <div class="no-record">
+                        No attendance record for this month.
+                    </div>
+
+                `;
+
+            } else {
+
+
+                let tableHTML = `
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Employee ID
+                                </th>
+
+                                <th>
+                                    Employee Name
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Time In
+                                </th>
+
+                                <th>
+                                    Time Out
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                `;
+
+
+                employeeRecords.forEach(
+                    function(record) {
+
+
+                    const statusClass =
+                        record.status === "Present"
+                        ? "present"
+                        : "absent";
+
+
+                    tableHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${record.employeeId}
+                            </td>
+
+                            <td>
+                                ${record.employeeName}
+                            </td>
+
+                            <td>
+                                ${record.date}
+                            </td>
+
+                            <td>
+                                ${record.timeIn || "-"}
+                            </td>
+
+                            <td>
+                                ${record.timeOut || "-"}
+                            </td>
+
+                            <td class="${statusClass}">
+                                ${record.status || "-"}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                });
+
+
+                tableHTML += `
+
+                        </tbody>
+
+                    </table>
+
+                `;
+
+
+                recordArea.innerHTML =
+                    tableHTML;
+
+            }
+
+
+            /* EMPLOYEE CLICK */
+
+            employeeHeader.addEventListener(
+                "click",
+                function() {
+
+                    const isOpen =
+                        recordArea.style.display
+                        === "block";
+
+
+                    recordArea.style.display =
+                        isOpen
+                        ? "none"
+                        : "block";
+
+
+                    const arrow =
+                        employeeHeader
+                        .querySelector(".arrow");
+
+
+                    arrow.textContent =
+                        isOpen
+                        ? "▶"
+                        : "▼";
+
+                }
+            );
+
+
+            employeeBox.appendChild(
+                employeeHeader
+            );
+
+            employeeBox.appendChild(
+                recordArea
+            );
+
+            employeeArea.appendChild(
+                employeeBox
+            );
+
+        });
+
+
+        /* DEPARTMENT CLICK */
+
+        departmentHeader.addEventListener(
+            "click",
+            function() {
+
+                const isOpen =
+                    employeeArea.style.display
+                    === "block";
+
+
+                employeeArea.style.display =
+                    isOpen
+                    ? "none"
+                    : "block";
+
+
+                const arrow =
+                    departmentHeader
+                    .querySelector(".arrow");
+
+
+                arrow.textContent =
+                    isOpen
+                    ? "▶"
+                    : "▼";
+
+            }
+        );
+
+
+        departmentBox.appendChild(
+            departmentHeader
+        );
+
+        departmentBox.appendChild(
+            employeeArea
+        );
+
+
+        container.appendChild(
+            departmentBox
+        );
 
     });
 
-
-    document.getElementById("totalPresent").textContent =
-        totalPresent;
-
-    document.getElementById("totalAbsent").textContent =
-        totalAbsent;
 }
 
 
 /* START */
 
-displayToday();
+createMonthOptions();
+
 loadAttendance();
 
 
-/*
-   Refresh records whenever the page
-   becomes active again.
-*/
+/* REFRESH WHEN RETURNING TO PAGE */
 
-window.addEventListener("focus", function() {
-    loadAttendance();
-});
+window.addEventListener(
+    "focus",
+    loadAttendance
+);
 
 </script>
 
+
 </body>
+
 </html>
